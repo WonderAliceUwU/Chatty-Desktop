@@ -2,11 +2,22 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Hello World!</title>
-    <link rel="stylesheet" href="index.css" />
+    <title>Welcome!</title>
+    <link rel="stylesheet" href="index.css"/>
   </head>
-  <body>
-    <h1>💖 Hello World!</h1>
-    <p>Welcome to your Electron application.</p>
+  <button class="theme-toggle" role="button" id="toggle-dark-mode"></button>
+  <body class="login-body">
+    <div class= "logo">
+      <img class="logo-image" src="Images/ChattyLogo.png" >
+    </div>
+    <div class="user-form">
+      <h1 style="text-align: center">
+        💖 Welcome!
+      </h1>
+      <input class="custom-input" type="text" id="UserInput" name="UserInput" placeholder="Username">
+      <input class="custom-input" type="text" id="PassInput" name="PassInput" placeholder="Password">
+      <button class="custom-button login-button" role="button" id="login-button">Login</button>
+    </div>
+    <script src="renderer.js"></script>
   </body>
 </html>
