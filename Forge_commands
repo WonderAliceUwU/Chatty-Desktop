@@ -1,4 +1,0 @@
-To start app: -npm start
-To make app:  -npm run make
-To publish app: -npm run publish
-Platforms: --platform=win32 --arch=x64

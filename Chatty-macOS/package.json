@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "icon": "src/Images/Logo.icns",
   "description": "My Electron application description",
-  "main": "src/index.js",
+  "main": "src/app.js",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
@@ -19,6 +19,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "electron-cookies": "^1.1.0",
     "electron-squirrel-startup": "^1.0.0"
   },
   "devDependencies": {

@@ -1,0 +1,362 @@
+@font-face {
+  font-family: 'CustomRegular';
+  src: url('../Fonts/PatuaOne.ttf');
+}
+
+::-webkit-scrollbar {
+  width: 21px;
+  margin: 5rem;
+}
+/* Style the scrollbar thumb */
+::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 5px;
+}
+
+*{
+  box-sizing: border-box;
+}
+
+html, body{
+  height: 100%;
+}
+
+.profile{
+  margin-bottom: 1rem;
+}
+
+.login-body {
+  font-family: 'CustomRegular', sans-serif;
+  margin: auto;
+  text-align: center;
+  -webkit-app-region: drag;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 100%;
+}
+
+.lobby-body{
+  font-family: 'CustomRegular', sans-serif;
+  margin: auto;
+  margin-top: 0.5rem;
+  text-align: center;
+  display: grid;
+  grid-template-columns: 30% 70%;
+  column-gap: 1rem;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+.feed-message{
+  text-align: left;
+  margin-top: 1rem;
+}
+
+.feed-message-background{
+  border-radius: 8px;
+  width: 95%;
+}
+
+.feed-image{
+  width: 450px;
+  margin: 1rem;
+  border-radius: 8px;
+}
+
+.feed-div{
+  margin-bottom: 50px;
+  overflow-y: scroll;
+  flex: 1;
+  overflow: visible;
+}
+
+.feed-content{
+  width: 90%;
+  margin-left: 1rem;
+  padding: 0.5rem;
+  text-align: left;
+  border-radius: 8px;
+}
+
+.footer{
+  font-family: 'CustomRegular', sans-serif;
+  margin-top: 1rem;
+  position: absolute;
+  bottom: 10px;
+  display: grid;
+  grid-template-columns: 30% 70%;
+  grid-template-rows: 15%;
+  grid-gap: 1rem;
+}
+
+.chat-user{
+  font-family: 'CustomRegular', sans-serif;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  margin-right: 4rem;
+  display: grid;
+  grid-template-columns: 10% 28%;
+  grid-template-rows: 15%;
+}
+
+.chat-bar{
+  align-items: center;
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: 5% 95%;
+  grid-template-rows: 15%;
+}
+
+
+#feed-input{
+  font-family: CustomRegular, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 6px;
+  line-height: 1.5;
+  padding: 5px 10px;
+  transition: box-shadow 100ms ease-in, border 100ms ease-in, background-color 100ms ease-in;
+  height: 3rem;
+  outline: none;
+  z-index: 1;
+  -webkit-app-region: no-drag;
+  margin-right: 10px;
+  position: absolute; /* add this property to enable absolute positioning */
+  bottom: 1rem;
+  margin-top: 1rem;
+  width: 100%;
+  background-image: url('../Images/send-message.png');
+  background-position: center right 0.5rem;
+  background-size: 22px;
+  background-repeat: no-repeat;
+}
+
+#send-feed-button{
+  padding: 10px;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
+
+.friend-button, .setting-button{
+  text-align:left;
+  width: 90%;
+  background-color: transparent;
+}
+
+.user-pfp{
+  width:40px;
+  height:40px;
+  position: absolute;
+  left: 5px;
+  top: 10px;
+  z-index: 2;
+  border-radius: 50%;
+}
+
+.chat-pfp{
+  width:45px;
+  height:45px;
+  z-index: 2;
+  border-radius: 50%;
+}
+
+.friend-status, .feed-date {
+  font-size: 12px;
+}
+
+#chat-status{
+  font-size: 12px;
+}
+
+.user-item{
+  position: relative;
+  display: inline-block;
+  margin-top: 0.3rem;
+  width: 100%;
+  background-color: transparent;
+}
+
+.feed-fields{
+  position: relative;
+  width: 95%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.lobby-feed{
+  text-align: center;
+  overflow-y: auto;
+}
+
+#side-menu{
+  text-align: center;
+  width: 100%;
+  -webkit-app-region: drag;
+}
+
+#side-menu:hover{
+}
+
+.logo{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: -1;
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-image{
+  object-fit: contain;
+  width: 80%;
+  height: 80%;
+}
+
+.user-form{
+  position: relative;
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  max-width: 20rem;
+  min-width: 100%;
+}
+
+.custom-button {
+  border-radius: 8px;
+  border-width: 0;
+  cursor: pointer;
+  display: inline-block;
+  font-family: 'CustomRegular', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  list-style: none;
+  padding: 10px 12px;
+  text-align: center;
+  transition: all 200ms;
+  vertical-align: baseline;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  position: relative;
+  z-index: 1;
+  outline: none;
+  -webkit-app-region: no-drag;
+}
+
+.friend-button, .visitedButton, #self-button, .setting-button, .feed-user-button {
+  border-radius: 8px;
+  width: 90%;
+  align-items: center;
+  border-width: 0;
+  cursor: pointer;
+  display: inline-block;
+  font-family: 'CustomRegular', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 20px;
+  list-style: none;
+  padding: 10px 12px;
+  text-align: center;
+  transition: all 200ms;
+  vertical-align: baseline;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  position: relative;
+  z-index: 0;
+  outline: none;
+  background-color: transparent;
+  -webkit-app-region: no-drag;
+}
+
+.feed-user-button{
+  width: 35%;
+}
+
+
+.login-button{
+  margin: 0px 7rem;
+  font-size: 16px;
+}
+
+.login-button:hover {
+  background-color: #c65584;
+  color: white;
+}
+
+.theme-toggle{
+  background-color: rgba(73,73,73,0);
+  top: 2.5%;
+  left: 95%;
+  height: 1.5rem;
+  width: 1.5rem;
+  position: absolute;
+  border: none;
+  z-index: 1;
+  padding: 0px;
+  touch-action: manipulation;
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+}
+.custom-input {
+  font-family: CustomRegular, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 6px;
+  line-height: 1.5;
+  padding: 5px 10px;
+  transition: box-shadow 100ms ease-in, border 100ms ease-in, background-color 100ms ease-in;
+  height: 3rem;
+  outline: none;
+  position: relative;
+  z-index: 1;
+  -webkit-app-region: no-drag;
+}
+
+
+.custom-input:focus, #feed-input:focus {
+  border-color: #c65584;
+}
+
+
+@media (prefers-color-scheme: dark) {
+  body {background: #333; color: white; }
+  .custom-button {background-color: #494949; color: white;}
+  .custom-input, #feed-input {background-color: #494949; color: #dedede; border: 2px solid #494949;}
+  .theme-toggle{ background-image: url(../Images/Sun.png); background-size: contain; width: 20px;
+    height: 20px; background-repeat: no-repeat;}
+  .lobby-body{  background: linear-gradient(to right, #494949 30%, #333 0%);}
+  .friend-button:hover,  #self-button:hover, .setting-button:hover, .feed-message-background{background-color: #3A3A3AB2;}
+  .friend-button, .setting-button, .feed-user-button, #self-user, .feed-message{color: #dadada;}
+  .friend-status, .feed-date{color: #b6b6b6;}
+  .visitedButton{background-color: #3A3A3AB2; color: white;}
+}
+
+@media (prefers-color-scheme: light) {
+  body {background: #E9E8E8; color: #363636; }
+  .custom-button {background-color: #c2c2c2; color: #363636;}
+  .custom-input, #feed-input {background-color: #c2c2c2; color: #333333; border: 2px solid #c2c2c2;}
+  .theme-toggle{ background-image: url(../Images/Moon_light.png); background-size: contain; width: 20px;
+    height: 20px; background-repeat: no-repeat;}
+  .lobby-body{background: linear-gradient(to right, #dadada 30%, #E9E8E8 0%)}
+  #feed-input, #send-feed-button, .feed-message-background{background-color: #dadada; border-color: #dadada;}
+  #feed-input:focus {border-color: #c65584;}
+  .friend-button:hover, #self-button:hover, .setting-button:hover {background-color: #c4c4c4;}
+  .friend-button, .setting-button{color: #363636;}
+  .friend-status, .feed-date{color: #696969;}
+  .visitedButton{background-color: #adadad; color: #363636;}
+}

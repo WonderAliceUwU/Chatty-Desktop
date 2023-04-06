@@ -1,15 +1,13 @@
 const { app, BrowserWindow, ipcMain, nativeTheme } = require('electron');
 const path = require('path');
-const url = require('url');
 const net = require('net');
 const electron = require("electron");
-
-var socketClient
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
+
 
 const createWindow = () => {
   // Create the browser window.
@@ -20,15 +18,17 @@ const createWindow = () => {
     icon: path.join(__dirname, 'src/Images/icon.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true,
+      enableRemoteModule: true,
     },
   });
 
   // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, 'index.html'));
+  mainWindow.loadFile(path.join(__dirname, 'Pages/Login/login.html'));
+
 
   const app = electron.app;
   const icon = electron.nativeImage.createFromPath(app.getAppPath() + "/src/Images/icon.png");
-  console.log(icon.getSize())
   app.dock.setIcon(icon);
 
   //toggle that detects if dark mode is enabled in the system, changing the scheme colors
@@ -46,30 +46,30 @@ const createWindow = () => {
   })
 
 
-  //console.log('Try to connect');
-  //socketClient = net.connect({host:'localhost', port:5001},  () => {
-    // 'connect' listener
-    //console.log('connected to server!');
-    //socketClient.write('world!\r\n');
-  //});
+  // Connect to the server on port 3000
+  const client = net.createConnection({ port: 3000 }, () => {
+    console.log('Connected to server');
+  });
 
-  //socketClient.on('data', (data) => {
-    //console.log(data.toString());
-    //var person = JSON.parse(data);
-
-    //console.log('Hello !');
-
-  //});
-  //socketClient.on('end', () => {
-  //  console.log('disconnected from server');
-  //});
-
-  app.on('before-quit',function(){
-    //socketClient.end();
+  ipcMain.handle('send-server', (event, username) =>{
+    client.write(username);
   })
 
-  // Open the DevTools.
-//mainWindow.webContents.openDevTools();
+  ipcMain.handle('receive-server', (event) =>{
+    client.on('data', (data) => {
+      return data.toString()
+    });
+  })
+
+// When data is received from the server, log it to the console
+  client.on('data', (data) => {
+    console.log(`Received message from server: ${data.toString()}`);
+  });
+
+// When the connection is closed, log a message
+  client.on('end', () => {
+    console.log('Disconnected from server');
+  });
 };
 
 // This method will be called when Electron has finished

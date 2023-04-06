@@ -93,3 +93,6 @@ Forge_commands
 
 # Electron-Forge
 out/
+
+#Jetbrains Files
+./idea

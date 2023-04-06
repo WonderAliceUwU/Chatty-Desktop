@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../styles.css"/>
+  </head>
+  <button class="theme-toggle" role="button" id="toggle-dark-mode"></button>
+  <body class="lobby-body">
+    <div class= "side-menu" id="side-menu">
+      <img src="../../Images/Logo.png" alt="pfp" style="width: 35px; height: 35px">
+      <div class="menu-item">
+        <div class="user-item">
+          <button class="friend-button" role="button">
+            <img class="user-pfp" src="https://i.imgur.com/el0VJBY.png" alt="pfp">Etherion
+            <div class="friend-status">Playing lost ark</div>
+          </button>
+        </div>
+        <div class="user-item">
+          <button class="friend-button" role="button">
+            <img class="user-pfp" src="https://memestatic.fjcdn.com/pictures/Sir+daniel+fortesque+edited+for+some+minor+errors_c22c35_7424009.jpg" alt="pfp">Arkidon
+            <div class="friend-status">IntelliJ</div>
+          </button>
+        </div>
+        <div class="user-item">
+          <button class="friend-button" role="button">
+            <img class="user-pfp" src="https://i.redd.it/6ircr4gyroca1.jpg" alt="pfp">Daviis00
+            <div class="friend-status">Coping with spring</div>
+          </button>
+        </div>
+        <div class="user-item">
+          <button class="friend-button" role="button">
+            <img class="user-pfp" src="https://i.redd.it/700vj7xjchi41.jpg" alt="pfp">Claruchu
+            <div class="friend-status">a</div>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="lobby-feed">
+      <div class="chat-bar">
+        <button class="custom-button" id="back-chat-button" role="button" style="background: transparent"> < </button>
+        <div class="chat-user">
+          <img class="chat-pfp" src="https://i.imgur.com/el0VJBY.png" alt="pfp">
+          <div>
+            <div id="chat-username">Etherion</div>
+            <div id="chat-status">Playing lost ark</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <body class="footer">
+    <div class="profile">
+      <button id="self-button" role="button">
+        <img class="user-pfp" src="https://external-preview.redd.it/oGZz2_J2HBzIeKkE1EwgoJ9PRWLKHkJwim13rGIVhCo.jpg?auto=webp&s=e35909b1339259ba04a26a31d825fd762c0c69cf" alt="pfp"><medium id="self-user">Sample text</medium>
+        <div class="friend-status">Coding chatty!</div>
+      </button>
+    </div>
+    <div class="feed-fields">
+      <input class="custom-input" type="text" id="feed-input" placeholder="What's happening?">
+      <button class="custom-button" role="button" id="send-feed-button"> > </button>
+    </div>
+  </body>
+  <script src="../../renderer.js"></script>
+  <script src="chat_scripts.js"></script>
+</html>
