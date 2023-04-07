@@ -2,6 +2,8 @@ const { app, BrowserWindow, ipcMain, nativeTheme } = require('electron');
 const path = require('path');
 const net = require('net');
 const electron = require("electron");
+const WebSocket = require('ws');
+const socket = new WebSocket('ws://localhost:8080');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -46,30 +48,6 @@ const createWindow = () => {
   })
 
 
-  // Connect to the server on port 3000
-  const client = net.createConnection({ port: 3000 }, () => {
-    console.log('Connected to server');
-  });
-
-  ipcMain.handle('send-server', (event, username) =>{
-    client.write(username);
-  })
-
-  ipcMain.handle('receive-server', (event) =>{
-    client.on('data', (data) => {
-      return data.toString()
-    });
-  })
-
-// When data is received from the server, log it to the console
-  client.on('data', (data) => {
-    console.log(`Received message from server: ${data.toString()}`);
-  });
-
-// When the connection is closed, log a message
-  client.on('end', () => {
-    console.log('Disconnected from server');
-  });
 };
 
 // This method will be called when Electron has finished

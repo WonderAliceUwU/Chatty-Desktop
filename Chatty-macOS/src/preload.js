@@ -6,6 +6,6 @@ contextBridge.exposeInMainWorld('darkMode', {
 })
 
 contextBridge.exposeInMainWorld('electron', {
-    sendServer: (username) => ipcRenderer.invoke('send-server', username),
+    sendServer: (message) => ipcRenderer.invoke('send-server', message),
     receiveServer: () => ipcRenderer.invoke('receive-server'),
 })
