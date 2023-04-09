@@ -25,9 +25,7 @@ async function register(){
                 }
 
                 const data = await response.json();
-                console.log(data); // logged in successfully
-                localStorage.setItem('username', username)
-                location.href = '../Main/main.html'
+                location.href = '../Login/login.html'
             } catch (err) {
                 console.error(err);
             }
@@ -41,12 +39,18 @@ async function register(){
     }
 }
 
-var x = document.getElementById("PassInput");
-    if (x.type === "password") {
-        x.type = "text";
-    } else {
-        x.type = "password";
-    }
+let passfield = document.getElementById("PassInput")
+let passrepfield = document.getElementById("RepeatPassInput")
+if (passfield.type === "password") {
+    passfield.type = "text";
+} else {
+    passfield.type = "password";
+}
+if (passrepfield.type === "password") {
+    passrepfield.type = "text";
+} else {
+    passrepfield.type = "password";
+}
 
 function goLogin(){
     location.href='../Login/login.html'

@@ -2,11 +2,14 @@ const express = require('express');
 const expressWs = require('express-ws');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const { User, sequelize } = require('./models');
+const { User,FeedMessages, ProfileImages,sequelize, Friendships} = require('./models');
 const app = express();
 const wsInstance = expressWs(app);
 const JWT_SECRET = 'Wonder4liceChattyKey';
 const CryptoJS = require("crypto-js");
+const multer = require('multer');
+const {where, Op} = require("sequelize");
+const upload = multer({ dest: 'uploads/' });
 
 
 app.use(cors());
@@ -28,7 +31,6 @@ async function findUser(username, password, mode) {
                 password,
             },
         });
-        console.log(user)
         return user;
     }
     if (mode === "search"){
@@ -37,7 +39,6 @@ async function findUser(username, password, mode) {
                 username,
             },
         });
-        console.log(user)
         return user;
     }
 }
@@ -60,6 +61,39 @@ app.post('/login', async (req, res) => {
         .catch((err) => console.error(err));
 });
 
+app.post('/request-feed', async (req, res) =>{
+    const token = req.url.split('?token=')[1];
+    if (!token) {
+        console.log('feed-rejected')
+        res.status(401);
+    }
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const { username } = decoded;
+
+    const friends = await Friendships.findAll({
+        where: {
+            username,
+        }
+    }).then(async friends => {
+        const userFriends = [];
+        userFriends.push(username)
+        for (let i = 0; i < friends.length; i++) {
+            userFriends.push(friends[i].friend);
+        }
+
+        const feed = await FeedMessages.findAll({
+            where: {
+                username: {
+                    [Op.in]: userFriends
+                }
+            },
+            order: [['createdAt', 'ASC']]
+        }).then(async feed => {
+            res.status(200).json({feed});
+        })
+    })
+})
+
 app.post('/register', async (req, res) => {
     const {username, password} = req.body;
 
@@ -73,8 +107,7 @@ app.post('/register', async (req, res) => {
                         password: CryptoJS.SHA3(password, { outputLength: 256 }).toString(),
                     }).then((user) => {
                         console.log('User created successfully:', user.toJSON());
-                        const token = generateJwtToken(username);
-                        res.status(200).json({token});
+                        res.status(200).json({ok: 'User created'});
                         console.log('client autenticated')
                     }).catch((error) => {
                         console.log('Error creating user: ', error);
@@ -90,17 +123,131 @@ app.post('/register', async (req, res) => {
     });
 });
 
+app.post('/feed-message', async(req, res) => {
+    const message = req.body.text;
+    const token = req.url.split('?token=')[1];
+    let today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    const yyyy = today.getFullYear();
+    today = mm + '/' + dd + '/' + yyyy;
+    if (!token) {
+        // If there is no JWT token, close the WebSocket connection
+        console.log('message rejected')
+        return;
+    }
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const { username } = decoded;
 
+    sequelize.sync({force: false}).then(() => {
+        // Insert a user
+        FeedMessages.create({
+            username: username,
+            message: message,
+            time: today,
+        }).then((user) => {
+            console.log('Feed created successfully:', user.toJSON());
+            res.status(200);
+            console.log('Recieved feed message: ' + message + ' from ' + username)
+        }).catch((error) => {
+            console.log('Error creating feed message: ', error);
+            res.status(401).json({error: 'Error creating feed message'});
+        })
+    })
+})
+
+app.post('/change_profile', async (req, res) => {
+    const {username, newUsername, newPassword, newStatus} = req.body;
+
+    if(newStatus !== "") {
+        sequelize.sync({force: false}).then(() => {
+            User.update({status: newStatus},
+                {where: {username: username}}
+            )
+                .then(result => {
+                        console.log('User updated successfully:', user.toJSON());
+                        res.status(200);
+                    }
+                )
+                .catch(err => {
+                    res.status(401).json({error: 'Error updating user'});
+                })
+        })
+    }
+    if(newPassword !== ""){
+        User.update(
+            { password: CryptoJS.SHA3(newPassword, { outputLength: 256 }).toString() },
+            { where: { username: username} }
+        )
+            .then(result =>{
+                console.log('User updated successfully:', user.toJSON());
+                res.status(200).json({token});
+            }
+            )
+            .catch(err =>{
+                res.status(401).json({error: 'Error updating user'});
+            })
+    }
+    if(newUsername !== ""){
+        User.update(
+            { username: newUsername },
+            { where: { username: username}}
+        )
+            .then(result =>{
+                console.log('User updated successfully:', user.toJSON());
+                res.status(200).json({token});
+            }
+            )
+            .catch(err =>{
+                res.status(401).json({error: 'Error updating user'});
+            })
+    }
+});
+
+app.post('/upload-profile-image', upload.single('image'), async (req, res) => {
+    if (!req.file) {
+        return res.status(400).send('No image file uploaded!');
+    }
+    const {filename, mimetype, buffer} = req.file;
+    const token = req.url.split('?token=')[1];
+    const {username} = jwt.verify(token, JWT_SECRET);
+    // create a new Image instance and save it to the database
+    //sequelize.sync({force: false}).then(() => {
+        ProfileImages.create({
+            filename: filename,
+            mimetype,
+            data: buffer,
+            username: username,
+        }).then(r => {
+            res.send('Image uploaded successfully!');
+            /*}).catch((error) => {
+                if (error.name === 'SequelizeValidationError') {
+                    // handle validation errors
+                    const messages = error.errors.map((err) => err.message);
+                    res.status(400).send(`Validation errors: ${messages.join(', ')}`);
+                } else if (error.name === 'SequelizeUniqueConstraintError') {
+                    // handle unique constraint errors
+                    res.status(400).send('Profile image already exists!');
+                } else {
+                    // handle other errors
+                    console.error('Error storing profile image in database:', error);
+                    res.status(500).send('Error uploading profile image!');
+                }
+            })*/
+        })
+   // });
+});
 
 
 // Handle incoming WebSocket connections
 app.ws('/', (socket, req) => {
     // Check for a valid JWT token in the request headers
     const authHeader = req.headers.authorization;
-    const token = authHeader && authHeader.split(' ')[1];
+    const token = req.url.split('?token=')[1];
     if (!token) {
         // If there is no JWT token, close the WebSocket connection
         socket.close();
+        console.log('client rejected')
         return;
     }
 

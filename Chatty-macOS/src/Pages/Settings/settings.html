@@ -4,13 +4,12 @@
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="../styles.css"/>
   </head>
-  <button class="theme-toggle" role="button" id="toggle-dark-mode"></button>
   <body class="lobby-body">
     <div class= "side-menu" id="side-menu">
       <img src="../../Images/Logo.png" alt="pfp" style="width: 35px; height: 35px">
       <div class="menu-item">
         <div class="user-item">
-          <button class="visitedButton" id="general-button" role="button">
+          <button class="setting-button" id="general-button" role="button">
             General
           </button>
         </div>
@@ -37,14 +36,36 @@
       </div>
     </div>
     <div class="lobby-feed">
-      General
+      <div class="setting-item">
+        <h2 class="setting-name">General</h2>
+        <hr class="setting-separator">
+      </div>
+      <div class="setting-item">
+        <h2 class="setting-name">Profile</h2>
+        <hr class="setting-separator">
+        <div style="display: flex; align-items: center; ">
+          <h3>Profile picture:</h3>
+          <input class="custom-input" id="pfp-input" placeholder="Put a new status" type="file" style="margin-left: 1rem; margin-right: 1rem; width: 60%">
+          <button class="custom-button" id="pfp-button">Upload</button>
+        </div>
+        <div style="display: flex; align-items: center; ">
+          <h3>Status:</h3>
+          <input class="custom-input" id="status-input" placeholder="Put a new status" style="margin-left: 1rem; margin-right: 1rem; width: 60%">
+          <button class="custom-button" id="status-button">Change</button>
+        </div>
+      </div>
+      <div class="setting-item">
+        <h2 class="setting-name">Appearance</h2>
+        <hr class="setting-separator">
+        <button class="theme-toggle" role="button" id="toggle-dark-mode">Mode: </button>
+      </div>
     </div>
   </body>
   <body class="footer">
     <div class="profile">
       <button id="self-button" role="button">
         <img class="user-pfp" src="https://external-preview.redd.it/oGZz2_J2HBzIeKkE1EwgoJ9PRWLKHkJwim13rGIVhCo.jpg?auto=webp&s=e35909b1339259ba04a26a31d825fd762c0c69cf" alt="pfp"><medium id="self-user">Sample text</medium>
-        <div class="friend-status">Coding chatty!</div>
+        <div class="friend-status" id="self-status">Coding chatty!</div>
       </button>
     </div>
   </body>

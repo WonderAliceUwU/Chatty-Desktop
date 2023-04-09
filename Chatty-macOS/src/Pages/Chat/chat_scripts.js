@@ -23,5 +23,5 @@ function back(){
 
 function openSettings(){
     localStorage.setItem("setting", "General")
-    location.href = "../Settings/settings-general.html"
+    location.href = "../Settings/settings.html"
 }

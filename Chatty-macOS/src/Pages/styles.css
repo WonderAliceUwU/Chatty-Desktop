@@ -50,6 +50,7 @@ html, body{
   text-align: center;
   display: grid;
   grid-template-columns: 30% 70%;
+  grid-template-rows: 87%;
   column-gap: 1rem;
   overflow-y: hidden;
   overflow-x: hidden;
@@ -312,11 +313,11 @@ html, body{
 
 .theme-toggle{
   background-color: rgba(73,73,73,0);
+  font-family: 'CustomRegular', sans-serif;
   top: 2.5%;
   left: 95%;
   height: 1.5rem;
   width: 1.5rem;
-  position: absolute;
   border: none;
   z-index: 1;
   padding: 0px;
@@ -324,6 +325,22 @@ html, body{
   cursor: pointer;
   -webkit-app-region: no-drag;
 }
+
+#login-theme-toggle{
+  background-color: rgba(73,73,73,0);
+  top: 2.5%;
+  left: 95%;
+  height: 1.5rem;
+  width: 1.5rem;
+  border: none;
+  z-index: 1;
+  padding: 0px;
+  touch-action: manipulation;
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+  position: absolute;
+}
+
 .custom-input {
   font-family: CustomRegular, sans-serif;
   font-size: 18px;
@@ -344,16 +361,28 @@ html, body{
   border-color: #c65584;
 }
 
+.setting-name{
+  text-align: left;
+}
+
+.setting-separator{
+  height:3px;
+  border-width:0;
+  border-radius: 8px;
+  margin-right: 26rem;
+  margin-top: -0.8rem;
+}
 
 @media (prefers-color-scheme: dark) {
   body {background: #333; color: white; }
-  .custom-button {background-color: #494949; color: white;}
+  .custom-button , .setting-separator{background-color: #494949; color: white;}
   .custom-input, #feed-input {background-color: #494949; color: #dedede; border: 2px solid #494949;}
-  .theme-toggle{ background-image: url(../Images/Sun.png); background-size: contain; width: 20px;
+  .theme-toggle, #login-theme-toggle{ background-image: url(../Images/Sun.png); background-size: contain; width: 20px;
     height: 20px; background-repeat: no-repeat;}
   .lobby-body{  background: linear-gradient(to right, #494949 30%, #333 0%);}
   .friend-button:hover,  #self-button:hover, .setting-button:hover, .feed-message-background{background-color: #3A3A3AB2;}
-  .friend-button, .setting-button, .feed-user-button, #self-user, .feed-message{color: #dadada;}
+  .friend-button, .setting-button, .feed-user-button, #self-user{color: #f2f3f5;}
+  .feed-message{color: #dcdee1}
   .friend-status, .feed-date{color: #b6b6b6;}
   .visitedButton{background-color: #3A3A3AB2; color: white;}
 }
@@ -362,13 +391,13 @@ html, body{
   body {background: #E9E8E8; color: #363636; }
   .custom-button {background-color: #c2c2c2; color: #363636;}
   .custom-input, #feed-input {background-color: #c2c2c2; color: #333333; border: 2px solid #c2c2c2;}
-  .theme-toggle{ background-image: url(../Images/Moon_light.png); background-size: contain; width: 20px;
+  .theme-toggle, #login-theme-toggle{ background-image: url(../Images/Moon_light.png); background-size: contain; width: 20px;
     height: 20px; background-repeat: no-repeat;}
   .lobby-body{background: linear-gradient(to right, #dadada 30%, #E9E8E8 0%)}
   #feed-input, #send-feed-button, .feed-message-background{background-color: #dadada; border-color: #dadada;}
   #feed-input:focus {border-color: #c65584;}
-  .friend-button:hover, #self-button:hover, .setting-button:hover {background-color: #c4c4c4;}
+  .friend-button:hover, #self-button:hover, .setting-button:hover, .setting-separator {background-color: #c4c4c4;}
   .friend-button, .setting-button{color: #363636;}
-  .friend-status, .feed-date{color: #696969;}
+  .friend-status, .feed-date, #chat-status{color: #696969;}
   .visitedButton{background-color: #adadad; color: #363636;}
 }

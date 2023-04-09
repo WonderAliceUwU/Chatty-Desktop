@@ -20,10 +20,17 @@ async function login(){
                 throw new Error('Login failed');
             }
 
-            const data = await response.json();
-            console.log(data); // logged in successfully
-            localStorage.setItem('username', username)
-            location.href = '../Main/main.html'
+            if (response.ok) {
+                const data = await response.json();
+                const token = data.token;
+
+                // Store the token in localStorage for future use
+                localStorage.setItem('token', token);
+                localStorage.setItem('username', username)
+                await window.electron.connectServer(token).then(r => {
+                    location.href = '../Main/main.html'
+                })
+            }
         } catch (err) {
             console.error(err);
         }

@@ -2,8 +2,7 @@ const { app, BrowserWindow, ipcMain, nativeTheme } = require('electron');
 const path = require('path');
 const net = require('net');
 const electron = require("electron");
-const WebSocket = require('ws');
-const socket = new WebSocket('ws://localhost:8080');
+const WebSocket = require('websocket').w3cwebsocket;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -14,7 +13,7 @@ if (require('electron-squirrel-startup')) {
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
+    width: 900,
     height: 600,
     titleBarStyle: 'hidden',
     icon: path.join(__dirname, 'src/Images/icon.png'),
@@ -47,7 +46,38 @@ const createWindow = () => {
     nativeTheme.themeSource = 'system'
   })
 
+  ipcMain.handle('reload-page', () => {
+    BrowserWindow.getFocusedWindow().webContents.reloadIgnoringCache()
+  })
 
+  ipcMain.handle('connect-server', (event, token) =>{
+    if (!token) {
+      // If there is no JWT token, redirect to the login page
+      window.location.href = '../Login/login.html';
+    }
+
+    const socket = new WebSocket(`ws://localhost:8080/?token=${token}`);
+
+    socket.addEventListener('open', () => {
+      console.log('WebSocket connection established');
+    });
+
+    ipcMain.handle('receive-message', () =>{
+      socket.addEventListener('message', (event) => {
+        const message = JSON.parse(event.data);
+
+        const li = document.createElement('li');
+        li.textContent = `${message.username}: ${message.text}`;
+
+        const messagesList = document.querySelector('#messages');
+        messagesList.appendChild(li);
+      });
+    })
+
+    socket.addEventListener('close', () => {
+      console.log('WebSocket connection closed');
+    });
+  })
 };
 
 // This method will be called when Electron has finished
