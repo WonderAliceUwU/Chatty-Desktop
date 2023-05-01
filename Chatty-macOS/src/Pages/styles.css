@@ -55,15 +55,38 @@ html, body{
   overflow-y: hidden;
   overflow-x: hidden;
 }
+
 .feed-message{
   text-align: left;
   margin-top: 1rem;
+}
+
+.self-message{
+  margin-top: 1rem;
+  color: #e3e3e3;
+}
+
+.friend-message{
+  margin-top: 1rem;
+  color: #e3e3e3;
 }
 
 .feed-message-background{
   border-radius: 8px;
   width: 95%;
 }
+
+.self-message-background{
+  border-radius: 12px 12px 0 12px;
+  width: 95%;
+  background-color: #b66080;
+}
+.friend-message-background{
+  border-radius: 12px 12px 12px 0;
+  width: 95%;
+  background-color: #a15088;
+}
+
 
 .feed-image{
   width: 450px;
@@ -84,6 +107,19 @@ html, body{
   padding: 0.5rem;
   text-align: left;
   border-radius: 8px;
+}
+
+.self-message-content{
+  width: 96%;
+  margin-left: 1rem;
+  padding: 0.5rem;
+  text-align: right;
+}
+
+.friend-message-content{
+  margin-left: 0.5rem;
+  padding: 0.5rem;
+  text-align: left;
 }
 
 .footer{
@@ -170,7 +206,17 @@ html, body{
   border-radius: 50%;
 }
 
-.friend-status, .feed-date {
+.chat-hour{
+  text-align: right;
+  margin-right: 3rem;
+}
+
+.chat-date{
+  text-align: center;
+  font-size: 16px;
+}
+
+.friend-status, .feed-date, .chat-hour {
   font-size: 12px;
 }
 
@@ -383,7 +429,7 @@ html, body{
   .friend-button:hover,  #self-button:hover, .setting-button:hover, .feed-message-background{background-color: #3A3A3AB2;}
   .friend-button, .setting-button, .feed-user-button, #self-user{color: #f2f3f5;}
   .feed-message{color: #dcdee1}
-  .friend-status, .feed-date{color: #b6b6b6;}
+  .friend-status, .feed-date, .chat-date, .chat-hour{color: #b6b6b6;}
   .visitedButton{background-color: #3A3A3AB2; color: white;}
 }
 
@@ -398,6 +444,6 @@ html, body{
   #feed-input:focus {border-color: #c65584;}
   .friend-button:hover, #self-button:hover, .setting-button:hover, .setting-separator {background-color: #c4c4c4;}
   .friend-button, .setting-button{color: #363636;}
-  .friend-status, .feed-date, #chat-status{color: #696969;}
+  .friend-status, .feed-date, .chat-date, .chat-hour, #chat-status{color: #696969;}
   .visitedButton{background-color: #adadad; color: #363636;}
 }

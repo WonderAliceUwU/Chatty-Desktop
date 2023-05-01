@@ -2,7 +2,7 @@ const express = require('express');
 const expressWs = require('express-ws');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const { User,FeedMessages, ProfileImages,sequelize, Friendships} = require('./models');
+const { User,FeedMessages,Messages, ProfileImages,sequelize, Friendships} = require('./models');
 const app = express();
 const wsInstance = expressWs(app);
 const JWT_SECRET = 'Wonder4liceChattyKey';
@@ -16,6 +16,7 @@ app.use(cors());
 app.use(express.json());
 
 // Define a secret key for JWT token encryption
+let connected = []
 
 // Define a function to generate a JWT token
 function generateJwtToken(username) {
@@ -54,7 +55,9 @@ app.post('/login', async (req, res) => {
                 res.status(401).json({error: 'Invalid username or password'});
             } else {
                 const token = generateJwtToken(username);
-                res.status(200).json({token});
+                const status = user.status
+                connected.push(username)
+                res.status(200).json({token, status});
                 console.log('client autenticated')
             }
         })
@@ -94,6 +97,28 @@ app.post('/request-feed', async (req, res) =>{
     })
 })
 
+app.post('/request-chat', async (req, res) =>{
+    const {friend} = req.body;
+    const token = req.url.split('?token=')[1];
+    if (!token) {
+        console.log('feed-rejected')
+        res.status(401);
+    }
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const { username } = decoded;
+    const userFriends = [];
+    userFriends.push(username)
+    userFriends.push(friend)
+    const chat = await Messages.findAll({
+        where: {
+            username: {[Op.in]:userFriends},
+            friend: {[Op.in]:userFriends}},
+        order: [['createdAt', 'DESC']]
+    }).then(async chat => {
+        res.status(200).json({chat});
+    })
+})
+
 app.post('/register', async (req, res) => {
     const {username, password} = req.body;
 
@@ -126,11 +151,6 @@ app.post('/register', async (req, res) => {
 app.post('/feed-message', async(req, res) => {
     const message = req.body.text;
     const token = req.url.split('?token=')[1];
-    let today = new Date();
-    const dd = String(today.getDate()).padStart(2, '0');
-    const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    const yyyy = today.getFullYear();
-    today = mm + '/' + dd + '/' + yyyy;
     if (!token) {
         // If there is no JWT token, close the WebSocket connection
         console.log('message rejected')
@@ -144,7 +164,6 @@ app.post('/feed-message', async(req, res) => {
         FeedMessages.create({
             username: username,
             message: message,
-            time: today,
         }).then((user) => {
             console.log('Feed created successfully:', user.toJSON());
             res.status(200);
@@ -156,54 +175,76 @@ app.post('/feed-message', async(req, res) => {
     })
 })
 
+app.post('/send-message', async(req, res) => {
+    //const message = req.body.text;
+    const {friend, text} = req.body;
+    const token = req.url.split('?token=')[1];
+    if (!token) {
+        // If there is no JWT token, close the WebSocket connection
+        console.log('message rejected')
+        return;
+    }
+    console.log("friend:" + friend + " message: " + text)
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const { username } = decoded;
+
+    sequelize.sync({force: false}).then(() => {
+        Messages.create({
+            username: username,
+            friend: friend,
+            message: text,
+        }).then((user) => {
+            //TODO finish send message function
+            res.status(200);
+            console.log('Recieved message: ' + text + ' from ' + username)
+        }).catch((error) => {
+            console.log('Error creating message: ', error);
+            res.status(401).json({error: 'Error creating message'});
+        })
+    })
+})
+
 app.post('/change_profile', async (req, res) => {
     const {username, newUsername, newPassword, newStatus} = req.body;
 
-    if(newStatus !== "") {
+    if(newStatus !== "") { //TODO doesnt work as expected yet
         sequelize.sync({force: false}).then(() => {
-            User.update({status: newStatus},
+            User.update(
+                {status: newStatus},
                 {where: {username: username}}
-            )
-                .then(result => {
-                        console.log('User updated successfully:', user.toJSON());
-                        res.status(200);
-                    }
-                )
-                .catch(err => {
-                    res.status(401).json({error: 'Error updating user'});
-                })
+            ).then(result => {
+                console.log('User updated successfully');
+                res.status(200);
+            }).catch(() => {
+                res.status(401).json({error: 'Error updating user'});
+            })
         })
     }
     if(newPassword !== ""){
         User.update(
             { password: CryptoJS.SHA3(newPassword, { outputLength: 256 }).toString() },
-            { where: { username: username} }
-        )
-            .then(result =>{
-                console.log('User updated successfully:', user.toJSON());
-                res.status(200).json({token});
-            }
-            )
-            .catch(err =>{
-                res.status(401).json({error: 'Error updating user'});
-            })
+            { where: { username: username}}
+        ).then(result =>{
+            console.log('User updated successfully:', user.toJSON());
+            res.status(200).json({token});
+        }).catch(err =>{
+            res.status(401).json({error: 'Error updating user'});
+        })
     }
     if(newUsername !== ""){
         User.update(
             { username: newUsername },
             { where: { username: username}}
-        )
-            .then(result =>{
-                console.log('User updated successfully:', user.toJSON());
-                res.status(200).json({token});
-            }
-            )
-            .catch(err =>{
-                res.status(401).json({error: 'Error updating user'});
-            })
+        ).then(result =>{
+            console.log('User updated successfully:', user.toJSON());
+            res.status(200).json({token});
+        }).catch(err =>{
+            res.status(401).json({error: 'Error updating user'});
+        })
     }
 });
 
+//TODO finish store image function
 app.post('/upload-profile-image', upload.single('image'), async (req, res) => {
     if (!req.file) {
         return res.status(400).send('No image file uploaded!');

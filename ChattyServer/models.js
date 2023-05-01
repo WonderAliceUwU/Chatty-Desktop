@@ -69,6 +69,24 @@ const FeedMessages = sequelize.define('FeedMessages', {
     // Other model options go here
 });
 
+const Messages = sequelize.define('Messages', {
+    // Model attributes are defined here
+    username: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    friend:{
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    message: {
+        type: DataTypes.STRING,
+        allowNull: false
+        // allowNull defaults to true
+    }
+}, {
+    // Other model options go here
+});
 
 const ProfileImages = sequelize.define('ProfileImages', {
     filename: {
@@ -94,6 +112,7 @@ const ProfileImages = sequelize.define('ProfileImages', {
 module.exports = {
     User,
     FeedMessages,
+    Messages,
     ProfileImages,
     Friendships,
     sequelize,

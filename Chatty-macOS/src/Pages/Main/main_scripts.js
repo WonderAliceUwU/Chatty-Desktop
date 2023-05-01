@@ -1,7 +1,14 @@
  document.getElementById('self-user').textContent = localStorage.getItem("username")
+ document.getElementById('self-status').textContent = localStorage.getItem("status")
  document.getElementById('self-button').addEventListener("click", openSettings)
  var input = document.getElementById("feed-input");
 
+ function getMonthName(monthNumber) {
+     const date = new Date();
+     date.setMonth(monthNumber - 1);
+
+     return date.toLocaleString('en-US', { month: 'long' });
+ }
 
 window.onload = async function () {
      const username = localStorage.getItem('username')
@@ -21,7 +28,7 @@ window.onload = async function () {
      if (response.ok) {
          const data = await response.json();
          const feed = data.feed;
-         console.log(data.feed)
+         console.log(data.feed);
          for (let i = feed.length-1; i >= 0; i--){
              let feedMessage=document.createElement('div')
              feedMessage.className = 'feed-message'
@@ -41,15 +48,8 @@ window.onload = async function () {
              pfp.className = 'user-pfp'
              pfp.src = "https://external-preview.redd.it/oGZz2_J2HBzIeKkE1EwgoJ9PRWLKHkJwim13rGIVhCo.jpg?auto=webp&s=e35909b1339259ba04a26a31d825fd762c0c69cf"
 
-             function getMonthName(monthNumber) {
-                 const date = new Date();
-                 date.setMonth(monthNumber - 1);
 
-                 return date.toLocaleString('en-US', { month: 'long' });
-             }
-
-
-             let cleanDate = getMonthName(feed[i].createdAt.slice(6, 7)).slice(0, 3) + ' ' + feed[i].createdAt.slice(9,10)
+             let cleanDate = getMonthName(feed[i].createdAt.slice(6, 7)).slice(0, 3) + ' ' + feed[i].createdAt.slice(8,10)
              let feedDate = document.createElement('div')
              feedDate.className = 'feed-date'
              feedDate.textContent = cleanDate

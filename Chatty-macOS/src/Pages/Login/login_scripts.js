@@ -27,6 +27,7 @@ async function login(){
                 // Store the token in localStorage for future use
                 localStorage.setItem('token', token);
                 localStorage.setItem('username', username)
+                localStorage.setItem('status', data.status)
                 await window.electron.connectServer(token).then(r => {
                     location.href = '../Main/main.html'
                 })

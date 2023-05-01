@@ -1,4 +1,5 @@
 document.getElementById('self-user').textContent = localStorage.getItem("username")
+document.getElementById('self-status').textContent = localStorage.getItem("status")
 document.getElementById('general-button').addEventListener("click", openGeneral)
 document.getElementById('profile-button').addEventListener("click", openProfile)
 document.getElementById('back-button').addEventListener("click", openMain)
@@ -58,11 +59,11 @@ async function changeStatus(){
                 throw new Error('Profile change failed');
             }
 
-            const data = await response.json();
-            console.log(data); // logged in successfully
-            localStorage.setItem('userStatus', newStatus)
-            document.getElementById('status-input').value = "";
-            location.reload()
+            if (response.ok) {
+                localStorage.setItem('status', newStatus)
+                document.getElementById('status-input').value = "";
+                window.electron.reloadPage()
+            }
         } catch (err) {
             console.error(err);
         }
