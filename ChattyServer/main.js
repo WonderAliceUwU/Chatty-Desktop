@@ -64,6 +64,26 @@ app.post('/login', async (req, res) => {
         .catch((err) => console.error(err));
 });
 
+app.post('/request-friend', async (req, res) =>{
+    const {requestedFriend} = req.body;
+    const token = req.url.split('?token=')[1];
+    if (!token) {
+        console.log('request-rejected')
+        res.status(401);
+    }
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const { username } = decoded;
+
+    const friends = await User.findAll({
+        where: {
+            username:{
+                [Op.like]: "%" + requestedFriend + "%"
+            },
+        }
+    }).then(async friends => {
+        res.status(200).json({friends});
+    })
+})
 app.post('/request-feed', async (req, res) =>{
     const token = req.url.split('?token=')[1];
     if (!token) {

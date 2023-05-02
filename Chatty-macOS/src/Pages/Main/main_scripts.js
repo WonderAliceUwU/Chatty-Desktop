@@ -1,6 +1,7 @@
  document.getElementById('self-user').textContent = localStorage.getItem("username")
  document.getElementById('self-status').textContent = localStorage.getItem("status")
  document.getElementById('self-button').addEventListener("click", openSettings)
+ document.getElementById('add-friend-button').addEventListener("click", openFriends)
  var input = document.getElementById("feed-input");
 
  function getMonthName(monthNumber) {
@@ -91,6 +92,10 @@ function openChat(element){
 function openSettings(){
     localStorage.setItem("setting", "General")
     location.href = "../Settings/settings.html"
+}
+
+function openFriends(){
+    location.href = "../Friends/friends.html"
 }
 
 function uploadFeed(text){
