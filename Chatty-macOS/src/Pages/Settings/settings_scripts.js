@@ -44,31 +44,22 @@ async function changeStatus(){
     const newUsername = ""
     const newPassword = ""
     const username = localStorage.getItem("username")
-    //if(newUsername !== "" && newPassword !== "" && newStatus !== ""){
-        try {
-            const response = await fetch('http://localhost:8080/change_profile', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, newUsername, newPassword, newStatus }),
-            });
-
-            if (!response.ok) {
-                //document.getElementById('error-label').style.visibility = "visible"
-                throw new Error('Profile change failed');
-            }
-
-            if (response.ok) {
-                localStorage.setItem('status', newStatus)
-                document.getElementById('status-input').value = "";
-                window.electron.reloadPage()
-            }
-        } catch (err) {
-            console.error(err);
+    localStorage.setItem('status', newStatus)
+    document.getElementById('status-input').value = "";
+    window.electron.reloadPage()
+    try {
+        const response = await fetch('http://localhost:8080/change_profile', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, newUsername, newPassword, newStatus }),
+        });
+        if(!response.ok) {
+            //document.getElementById('error-label').style.visibility = "visible"
+            throw new Error('Profile change failed');
         }
-    //}
-   // else{
-
-    //}
+    } catch (err) {
+        console.error(err);
+    }
 }

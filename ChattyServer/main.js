@@ -90,7 +90,7 @@ app.post('/request-feed', async (req, res) =>{
                     [Op.in]: userFriends
                 }
             },
-            order: [['createdAt', 'ASC']]
+            order: [['createdAt', 'DESC']]
         }).then(async feed => {
             res.status(200).json({feed});
         })
@@ -212,9 +212,9 @@ app.post('/change_profile', async (req, res) => {
             User.update(
                 {status: newStatus},
                 {where: {username: username}}
-            ).then(result => {
-                console.log('User updated successfully');
+            ).then((user) => {
                 res.status(200);
+                console.log("User updated succesfully")
             }).catch(() => {
                 res.status(401).json({error: 'Error updating user'});
             })

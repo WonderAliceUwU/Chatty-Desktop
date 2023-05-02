@@ -30,45 +30,42 @@ window.onload = async function () {
          const feed = data.feed;
          console.log(data.feed);
          for (let i = feed.length-1; i >= 0; i--){
-             let feedMessage=document.createElement('div')
-             feedMessage.className = 'feed-message'
-             let parent = document.getElementById('feed-div')
-             parent.appendChild(feedMessage)
-
-
-             let feedProfile = document.createElement('button')
-             feedProfile.className = 'feed-user-button'
-             let feedBackground = document.createElement('div')
-             feedBackground.className = 'feed-message-background'
-
-             feedMessage.appendChild(feedProfile)
-             feedMessage.appendChild(feedBackground)
-
-             let pfp = document.createElement('img')
-             pfp.className = 'user-pfp'
-             pfp.src = "https://external-preview.redd.it/oGZz2_J2HBzIeKkE1EwgoJ9PRWLKHkJwim13rGIVhCo.jpg?auto=webp&s=e35909b1339259ba04a26a31d825fd762c0c69cf"
-
-
-             let cleanDate = getMonthName(feed[i].createdAt.slice(6, 7)).slice(0, 3) + ' ' + feed[i].createdAt.slice(8,10)
-             let feedDate = document.createElement('div')
-             feedDate.className = 'feed-date'
-             feedDate.textContent = cleanDate
-
-             let feedUser = document.createElement('medium')
-             feedUser.className = 'feed-name'
-             feedUser.textContent = feed[i].username
-
-             feedProfile.appendChild(pfp)
-             feedProfile.appendChild(feedUser)
-             feedProfile.appendChild(feedDate)
-
-             let feedText = document.createElement('div')
-             feedText.className = 'feed-content'
-             feedText.textContent = feed[i].message
-
-             feedBackground.appendChild(feedText)
+             applyFeed(feed[i].message, getMonthName(feed[i].createdAt.slice(6, 7)).slice(0, 3) + ' ' + feed[i].createdAt.slice(8,10), feed[i].username)
              }
      }
+ }
+
+ function applyFeed(message, date, username){
+     let parent = document.getElementById('feed-div')
+     let feedMessage=document.createElement('div')
+     let feedProfile = document.createElement('button')
+     let feedBackground = document.createElement('div')
+     let pfp = document.createElement('img')
+     let feedDate = document.createElement('div')
+     let feedUser = document.createElement('medium')
+     let feedText = document.createElement('div')
+
+     feedMessage.className = 'feed-message'
+     feedProfile.className = 'feed-user-button'
+     feedBackground.className = 'feed-message-background'
+     pfp.className = 'user-pfp'
+     pfp.src = "https://external-preview.redd.it/oGZz2_J2HBzIeKkE1EwgoJ9PRWLKHkJwim13rGIVhCo.jpg?auto=webp&s=e35909b1339259ba04a26a31d825fd762c0c69cf"
+     feedDate.className = 'feed-date'
+     feedDate.textContent = date
+     feedUser.className = 'feed-name'
+     feedUser.textContent = username
+     feedText.className = 'feed-content'
+     feedText.textContent = message
+
+
+     parent.insertBefore(feedMessage, parent.firstChild)
+     feedMessage.appendChild(feedProfile)
+     feedMessage.appendChild(feedBackground)
+     feedProfile.appendChild(pfp)
+     feedProfile.appendChild(feedUser)
+     feedProfile.appendChild(feedDate)
+     feedBackground.appendChild(feedText)
+
  }
 
 Array.from(document.getElementsByClassName("friend-button"))
@@ -123,8 +120,13 @@ input.addEventListener("keypress", function(event) {
             event.preventDefault();
             // Trigger the button element with a click
             uploadFeed(message)
+            let today = new Date
+            let day = "0"
+            if(today.getDay() < 10){day = "0" + today.getDay()}
+            else {day = today.getDay()}
+            let time = getMonthName(today.getMonth() + 1).slice(0, 3) + " " + day
+            applyFeed(message, time, localStorage.getItem('username'))
             input.value = ""
-            window.electron.reloadPage()
         }
     }
 });

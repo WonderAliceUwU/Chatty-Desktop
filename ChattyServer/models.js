@@ -9,7 +9,15 @@ const sequelize = new Sequelize(
     {
         host: 'localhost',
         port: 6033,
-        dialect: 'mysql'
+        dialect: 'mysql',
+        dialectOptions: {
+            // useUTC: false, //for reading from database
+            dateStrings: true,
+            typeCast: true,
+            timezone: "+02:00"
+        },
+        timezone: "+02:00", //for writing to database
+        operatorsAliases: false
     }
 );
 module.exports = sequelize;

@@ -9,7 +9,6 @@ var input = document.getElementById("feed-input");
 function getMonthName(monthNumber) {
     const date = new Date();
     date.setMonth(monthNumber - 1);
-
     return date.toLocaleString('en-US', { month: 'long' });
 }
 
@@ -22,59 +21,57 @@ window.onload = async function () {
         },
         body: JSON.stringify({friend}),
     });
-
     if (!response.ok) {
         console.log("Error when loading chat")
     }
-
     if (response.ok) {
         const data = await response.json();
         const feed = data.chat;
-        console.log(data.chat);
-        let currentDate = 0;
-        let messagesDate = 1;
+        let messagesDate = "1";
         for (let i = feed.length-1; i >= 0; i--){
-            let parent = document.getElementById('feed-div')
-
+            let parent = document.getElementById('chat-div')
+            let currentDate = getMonthName(feed[i].createdAt.slice(6, 7)).slice(0, 3) + ' ' + feed[i].createdAt.slice(8,10);
             if(currentDate!==messagesDate){
                 messagesDate = document.createElement('div')
-                messagesDate.textContent = getMonthName(feed[i].createdAt.slice(6, 7)).slice(0, 3) + ' ' + feed[i].createdAt.slice(8,10)
+                messagesDate.textContent = currentDate
                 messagesDate.className = "chat-date"
 
                 parent.appendChild(messagesDate)
 
-                currentDate = messagesDate
+                messagesDate = currentDate
             }
-
-            let feedMessage=document.createElement('div')
-
-            let messageHour = feed[i].createdAt.slice(11,16)
-            let chatHour = document.createElement('div')
-            chatHour.className = 'chat-hour'
-            chatHour.textContent = messageHour
-
-            let feedBackground = document.createElement('div')
-
-            let feedText = document.createElement('div')
-            feedText.textContent = feed[i].message
-
-            if(feed[i].username === localStorage.getItem("username")){
-                feedMessage.className = 'self-message'
-                feedBackground.className = 'self-message-background'
-                feedText.className = 'self-message-content'
-            }
-            else{
-                feedMessage.className = 'friend-message'
-                feedBackground.className = 'friend-message-background'
-                feedText.className = 'feed-content'
-            }
-
-            parent.appendChild(feedMessage)
-            feedMessage.appendChild(chatHour)
-            feedMessage.appendChild(feedBackground)
-            feedBackground.appendChild(feedText)
+            applyMessage(feed[i].message, feed[i].username, feed[i].createdAt.slice(11,16))
         }
     }
+}
+
+function applyMessage(text, username, hour){
+    let parent = document.getElementById('chat-div')
+    let feedMessage=document.createElement('div')
+    let feedBackground = document.createElement('div')
+    let feedText = document.createElement('div')
+    let chatHour = document.createElement('div')
+
+    feedText.textContent = text
+    chatHour.className = 'chat-hour'
+    chatHour.textContent = hour
+
+    if(username === localStorage.getItem("username")){
+        feedMessage.className = 'self-message'
+        feedBackground.className = 'self-message-background'
+        feedText.className = 'self-message-content'
+    }
+    else{
+        feedMessage.className = 'friend-message'
+        feedBackground.className = 'friend-message-background'
+        feedText.className = 'friend-message-content'
+        chatHour.style.textAlign = "left"
+    }
+
+    parent.appendChild(feedMessage)
+    feedMessage.appendChild(chatHour)
+    feedMessage.appendChild(feedBackground)
+    feedBackground.appendChild(feedText)
 }
 
 Array.from(document.getElementsByClassName("friend-button"))
@@ -101,7 +98,6 @@ function openSettings(){
 
 function sendMessage(text){
     var friend = localStorage.getItem("userdata").split(/\r?\n/)[1].replace(/\s+/g, '')
-
     fetch(`http://localhost:8080/send-message?token=${localStorage.getItem('token')}`, {
         method: 'POST',
         headers: {
@@ -112,6 +108,8 @@ function sendMessage(text){
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to send message');
+            }
+            if(response.ok){
             }
         })
         .catch(error => {
@@ -128,8 +126,10 @@ input.addEventListener("keypress", function(event) {
             event.preventDefault();
             // Trigger the button element with a click
             sendMessage(message)
+            let today = new Date
+            let time = today.getHours() + ":" + today.getMinutes()
+            applyMessage(message, localStorage.getItem("username"), time)
             input.value = ""
-            window.electron.reloadPage()
         }
     }
 });
