@@ -62,7 +62,9 @@ async function searchFriends(requestedFriend) {
             friendResult.appendChild(friendButton)
             friendButton.appendChild(pfp)
             friendButton.appendChild(friendName)
-            friendButton.appendChild(friendStatus)
+            if(friendStatus.value !== null){
+                friendButton.appendChild(friendStatus)
+            }
         }
     }
 }

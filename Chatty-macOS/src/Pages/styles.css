@@ -264,8 +264,12 @@ html, body{
   background-color: transparent;
 }
 
+.search-item{
+  width: 90%;
+}
 .results-div{
   column-count: 2;
+  margin-left: -2rem;
 }
 
 .feed-fields{
@@ -387,6 +391,9 @@ html, body{
   width: 35%;
 }
 
+.friend-button{
+  min-height: 3.7rem;
+}
 
 .login-button{
   font-size: 16px;
