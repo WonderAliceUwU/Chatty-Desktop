@@ -57,6 +57,10 @@ const Friendships = sequelize.define('Friendships', {
         type: DataTypes.STRING,
         allowNull: false
         // allowNull defaults to true
+    },
+    status:{
+        type: DataTypes.STRING,
+        allowNull: false
     }
 }, {
     // Other model options go here

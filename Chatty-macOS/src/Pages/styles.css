@@ -24,7 +24,13 @@ html, body{
 .profile{
   margin-bottom: 1rem;
   display: flex;
+  border-radius: 8px;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  align-items: center;
+  transition: all 200ms;
 }
+
 
 .login-body {
   font-family: 'CustomRegular', sans-serif;
@@ -105,6 +111,13 @@ html, body{
   text-align: center;
   width: 5rem;
   border-radius: 8px;
+}
+
+#friend-button-search:hover{
+  background: url("../Images/green-check.png");
+  background-size: 1rem;
+  background-position: center right 1rem;
+  background-repeat: no-repeat;
 }
 
 #friend-bar{
@@ -269,7 +282,7 @@ html, body{
 }
 .results-div{
   column-count: 2;
-  margin-left: -2rem;
+  margin-left: -1.8rem;
 }
 
 .feed-fields{
@@ -329,11 +342,11 @@ html, body{
 }
 
 #self-user{
-  margin-left: 5rem
+  margin-left: 4.5rem
 }
 
 #self-status{
-  margin-left: 5rem
+  margin-left: 4.5rem
 }
 
 .custom-button {
@@ -391,9 +404,10 @@ html, body{
   width: 35%;
 }
 
-.friend-button{
+.friend-button, .visitedButton{
   min-height: 3.7rem;
 }
+
 
 .login-button{
   font-size: 16px;
@@ -479,7 +493,7 @@ html, body{
     height: 20px; background-repeat: no-repeat;}
   #friend-button-image{content: url("../Images/add-friend-button-dark.png")}
   .lobby-body{  background: linear-gradient(to right, #494949 30%, #333 0%);}
-  .friend-button:hover,  #self-button:hover, .setting-button:hover, #add-friend-button:hover, .feed-message-background{background-color: #3A3A3AB2;}
+  .friend-button:hover, #friend-button-search:hover, .profile:hover, .setting-button:hover, .feed-message-background{background-color: #3A3A3AB2;}
   .friend-button, .setting-button, .feed-user-button, #self-user{color: #f2f3f5;}
   .feed-message{color: #dcdee1}
   .friend-status, .feed-date, .chat-date, .chat-hour{color: #b6b6b6;}
@@ -496,7 +510,7 @@ html, body{
   .lobby-body{background: linear-gradient(to right, #dadada 30%, #E9E8E8 0%)}
   #feed-input, #send-feed-button, .feed-message-background{background-color: #dadada; border-color: #dadada;}
   #feed-input:focus {border-color: #c65584;}
-  .friend-button:hover, #self-button:hover, .setting-button:hover, #add-friend-button:hover, .setting-separator {background-color: #c4c4c4;}
+  .friend-button:hover,  #friend-button-search:hover, .profile:hover, .setting-button:hover, .setting-separator {background-color: #c4c4c4;}
   .friend-button, .setting-button{color: #363636;}
   .friend-status, .feed-date, .chat-date, .chat-hour, #chat-status{color: #696969;}
   .visitedButton{background-color: #adadad; color: #363636;}

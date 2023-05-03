@@ -6,6 +6,8 @@ document.getElementById('back-button').addEventListener("click", openMain)
 document.getElementById('status-button').addEventListener("click", changeStatus)
 document.getElementById('self-status').value = localStorage.getItem('userStatus')
 document.getElementById('pfp-input').addEventListener('change', imageUpload);
+document.getElementById('add-friend-button').addEventListener("click", openFriends)
+
 function openGeneral(){
     location.href = "settings.html"
 }
@@ -16,6 +18,10 @@ function openProfile(){
 
 function openMain(){
     location.href = "../Main/main.html"
+}
+
+function openFriends(){
+    location.href = "../Friends/friends.html"
 }
 
 async function imageUpload() {

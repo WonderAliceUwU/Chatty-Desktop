@@ -73,17 +73,125 @@ app.post('/request-friend', async (req, res) =>{
     }
     const decoded = jwt.verify(token, JWT_SECRET);
     const { username } = decoded;
-
-    const friends = await User.findAll({
+    await Friendships.findAll({
         where: {
-            username:{
-                [Op.like]: "%" + requestedFriend + "%"
-            },
-        }
-    }).then(async friends => {
-        res.status(200).json({friends});
+                username: username,
+        },
+    }).then(friendships =>{
+        const evadeFriends = friendships.map((friendships) => friendships.friend);
+        evadeFriends.push(username)
+        User.findAll({
+            where: {
+                username:{
+                    [Op.like]: "%" + requestedFriend + "%",
+                    [Op.notIn]: evadeFriends,
+                },
+            }
+        }).then(async friends => {
+            res.status(200).json({friends });
+        })
     })
 })
+
+app.post('/request-list-friend', async (req, res) => {
+    const token = req.url.split('?token=')[1];
+    if (!token) {
+        console.log('request-rejected')
+        res.status(401);
+    }
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const {username} = decoded;
+    await Friendships.findAll({
+        where: {
+            username: username,
+            status: 'Completed'
+        },
+    }).then(friendships => {
+        const include = friendships.map((friendships) => friendships.friend);
+        User.findAll({
+            where: {
+                username: {
+                    [Op.in]: include,
+                },
+            }
+        }).then(async friends => {
+            res.status(200).json({friends});
+        })
+    })
+})
+
+app.post('/request-friend-requests', async (req, res) =>{
+    const token = req.url.split('?token=')[1];
+    if (!token) {
+        console.log('request-rejected')
+        res.status(401);
+    }
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const { username } = decoded;
+
+    await Friendships.findAll({
+        where: {
+            friend: username,
+            status: 'Pending',
+        }
+    }).then(async requestsFriends => {
+        res.status(200).json({requestsFriends});
+    })
+})
+
+app.post('/accept-request', async (req, res) => {
+    const {target} = req.body;
+    const token = req.url.split('?token=')[1];
+    if (!token) {
+        console.log('request-rejected')
+        res.status(401);
+    }
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const {username} = decoded;
+    console.log("Request from " + target + " accepted by " + username)
+    await Friendships.update(
+        {status: 'Completed'},
+        {where: {username: target,
+                friend: username}
+        }).then((result) => {
+            sequelize.sync({force: false}).then(() => {
+            Friendships.create({
+                username: username,
+                friend: target,
+                status: 'Completed'
+            }).then((user) => {
+                res.status(200).json({message: 'Request completed'});
+            }).catch((error) => {
+                res.status(401).json({error: 'Error sending request'});
+            })
+        })
+    })
+})
+
+app.post('/make-request', async (req, res) =>{
+    const {target} = req.body;
+    const token = req.url.split('?token=')[1];
+    if (!token) {
+        console.log('request-rejected')
+        res.status(401);
+    }
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const { username } = decoded;
+
+    sequelize.sync({force: false}).then(() => {
+        Friendships.create({
+            username: username,
+            friend: target,
+            status: "Pending",
+        }).then((user) => {
+            res.status(200).json({message: 'Request made successfully'});
+            console.log('Recieved friend request');
+        }).catch((error) => {
+            res.status(401).json({error: 'Error sending request'});
+        })
+    })
+})
+
 app.post('/request-feed', async (req, res) =>{
     const token = req.url.split('?token=')[1];
     if (!token) {
@@ -93,9 +201,10 @@ app.post('/request-feed', async (req, res) =>{
     const decoded = jwt.verify(token, JWT_SECRET);
     const { username } = decoded;
 
-    const friends = await Friendships.findAll({
+    await Friendships.findAll({
         where: {
-            username,
+            username: username,
+            status: "Completed",
         }
     }).then(async friends => {
         const userFriends = [];
@@ -103,8 +212,7 @@ app.post('/request-feed', async (req, res) =>{
         for (let i = 0; i < friends.length; i++) {
             userFriends.push(friends[i].friend);
         }
-
-        const feed = await FeedMessages.findAll({
+        await FeedMessages.findAll({
             where: {
                 username: {
                     [Op.in]: userFriends
@@ -129,7 +237,7 @@ app.post('/request-chat', async (req, res) =>{
     const userFriends = [];
     userFriends.push(username)
     userFriends.push(friend)
-    const chat = await Messages.findAll({
+    await Messages.findAll({
         where: {
             username: {[Op.in]:userFriends},
             friend: {[Op.in]:userFriends}},
