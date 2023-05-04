@@ -7,7 +7,7 @@ async function login(){
 
     if(username !== "" && password !== ""){
         try {
-            const response = await fetch('http://localhost:8080/login', {
+            const response = await fetch('http://localhost:3000/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -28,6 +28,7 @@ async function login(){
                 localStorage.setItem('token', token);
                 localStorage.setItem('username', username)
                 localStorage.setItem('status', data.status)
+                localStorage.setItem('selfProfilePicture', data.pfp)
                 await window.electron.connectServer(token).then(r => {
                     location.href = '../Main/main.html'
                 })

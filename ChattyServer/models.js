@@ -42,6 +42,9 @@ const User = sequelize.define('User', {
     status: {
         type: DataTypes.STRING,
         // allowNull defaults to true
+    },
+    profilePicture: {
+        type: DataTypes.STRING,
     }
 }, {
     // Other model options go here
@@ -100,22 +103,21 @@ const Messages = sequelize.define('Messages', {
     // Other model options go here
 });
 
-const ProfileImages = sequelize.define('ProfileImages', {
+const Images = sequelize.define('Images', {
     filename: {
         type: DataTypes.STRING,
         allowNull: false,
+    },
+    url:{
+        type: DataTypes.STRING,
+        allowNull: false
     },
     mimetype: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    data: {
-        type: DataTypes.BLOB('long'),
-        allowNull: false,
-    },
     username:{
         type: DataTypes.STRING,
-        allowNull:false,
     }
 }, {
     // Other model options go here
@@ -125,7 +127,7 @@ module.exports = {
     User,
     FeedMessages,
     Messages,
-    ProfileImages,
+    Images,
     Friendships,
     sequelize,
 };

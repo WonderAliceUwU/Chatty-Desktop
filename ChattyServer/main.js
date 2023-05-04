@@ -2,18 +2,30 @@ const express = require('express');
 const expressWs = require('express-ws');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const { User,FeedMessages,Messages, ProfileImages,sequelize, Friendships} = require('./models');
+const { User,FeedMessages,Messages, sequelize, Friendships, Images} = require('./models');
 const app = express();
 const wsInstance = expressWs(app);
 const JWT_SECRET = 'Wonder4liceChattyKey';
 const CryptoJS = require("crypto-js");
 const multer = require('multer');
 const {where, Op} = require("sequelize");
-const upload = multer({ dest: 'uploads/' });
+
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, 'uploads/');
+    },
+    filename: function(req, file, cb) {
+        cb(null, file.originalname);
+    }
+});
+
+const upload = multer({ storage });
 
 
 app.use(cors());
 app.use(express.json());
+app.use('/uploads', express.static('uploads'));
+
 
 // Define a secret key for JWT token encryption
 let connected = []
@@ -56,8 +68,9 @@ app.post('/login', async (req, res) => {
             } else {
                 const token = generateJwtToken(username);
                 const status = user.status
+                const pfp = user.profilePicture
                 connected.push(username)
-                res.status(200).json({token, status});
+                res.status(200).json({token, status, pfp});
                 console.log('client autenticated')
             }
         })
@@ -185,7 +198,7 @@ app.post('/make-request', async (req, res) =>{
             status: "Pending",
         }).then((user) => {
             res.status(200).json({message: 'Request made successfully'});
-            console.log('Recieved friend request');
+            console.log('Received friend request');
         }).catch((error) => {
             res.status(401).json({error: 'Error sending request'});
         })
@@ -225,6 +238,15 @@ app.post('/request-feed', async (req, res) =>{
     })
 })
 
+app.post('/request-pfp-url', async (req, res) =>{
+    const {username} = req.body;
+    findUser(username, '', 'search').then(async user => {
+        let url = user.profilePicture
+        res.status(200).json({url});
+    })
+})
+
+
 app.post('/request-chat', async (req, res) =>{
     const {friend} = req.body;
     const token = req.url.split('?token=')[1];
@@ -258,6 +280,7 @@ app.post('/register', async (req, res) => {
                     User.create({
                         username: username,
                         password: CryptoJS.SHA3(password, { outputLength: 256 }).toString(),
+                        profilePicture: '/uploads/default_pfp.png'
                     }).then((user) => {
                         console.log('User created successfully:', user.toJSON());
                         res.status(200).json({ok: 'User created'});
@@ -295,7 +318,7 @@ app.post('/feed-message', async(req, res) => {
         }).then((user) => {
             console.log('Feed created successfully:', user.toJSON());
             res.status(200);
-            console.log('Recieved feed message: ' + message + ' from ' + username)
+            console.log('Received feed message: ' + message + ' from ' + username)
         }).catch((error) => {
             console.log('Error creating feed message: ', error);
             res.status(401).json({error: 'Error creating feed message'});
@@ -323,7 +346,7 @@ app.post('/send-message', async(req, res) => {
             message: text,
         }).then((user) => {
             //TODO finish send message function
-            res.status(200);
+            res.status(200).json({message: 'Message sent succesfully'});
             console.log('Recieved message: ' + text + ' from ' + username)
         }).catch((error) => {
             console.log('Error creating message: ', error);
@@ -341,7 +364,7 @@ app.post('/change_profile', async (req, res) => {
                 {status: newStatus},
                 {where: {username: username}}
             ).then((user) => {
-                res.status(200);
+                res.status(200).json({message: 'Status updated successfully'});
                 console.log("User updated succesfully")
             }).catch(() => {
                 res.status(401).json({error: 'Error updating user'});
@@ -371,41 +394,29 @@ app.post('/change_profile', async (req, res) => {
         })
     }
 });
+// Handle POST request to /api/images
+app.post('/api/images', upload.single('image'), (req, res) => {
+    const { filename, mimetype } = req.file;
+    const { username } = req.body;
 
-//TODO finish store image function
-app.post('/upload-profile-image', upload.single('image'), async (req, res) => {
-    if (!req.file) {
-        return res.status(400).send('No image file uploaded!');
-    }
-    const {filename, mimetype, buffer} = req.file;
-    const token = req.url.split('?token=')[1];
-    const {username} = jwt.verify(token, JWT_SECRET);
-    // create a new Image instance and save it to the database
-    //sequelize.sync({force: false}).then(() => {
-        ProfileImages.create({
-            filename: filename,
+    // Create new Image record in database
+    Images.destroy({
+        where: {username: username}
+    }).then(result =>{
+        Images.create({
+            filename,
+            url: `/uploads/${filename}`,
             mimetype,
-            data: buffer,
-            username: username,
-        }).then(r => {
-            res.send('Image uploaded successfully!');
-            /*}).catch((error) => {
-                if (error.name === 'SequelizeValidationError') {
-                    // handle validation errors
-                    const messages = error.errors.map((err) => err.message);
-                    res.status(400).send(`Validation errors: ${messages.join(', ')}`);
-                } else if (error.name === 'SequelizeUniqueConstraintError') {
-                    // handle unique constraint errors
-                    res.status(400).send('Profile image already exists!');
-                } else {
-                    // handle other errors
-                    console.error('Error storing profile image in database:', error);
-                    res.status(500).send('Error uploading profile image!');
-                }
-            })*/
+            username
+        }).then(image => {
+            res.status(200).json({ url: image.url })
+            User.update(
+                {profilePicture: image.url},
+                {where: {username: username}})
         })
-   // });
+    })
 });
+
 
 
 // Handle incoming WebSocket connections
@@ -452,6 +463,6 @@ app.ws('/', (socket, req) => {
 });
 
 // Start the HTTP server
-app.listen(8080, () => {
+app.listen(3000, () => {
     console.log('HTTP server listening on port 8080');
 });

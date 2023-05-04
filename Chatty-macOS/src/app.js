@@ -56,7 +56,7 @@ const createWindow = () => {
       window.location.href = '../Login/login.html';
     }
 
-    const socket = new WebSocket(`ws://localhost:8080/?token=${token}`);
+    const socket = new WebSocket(`ws://localhost:3000/?token=${token}`);
 
     socket.addEventListener('open', () => {
       console.log('WebSocket connection established');

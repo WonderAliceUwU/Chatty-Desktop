@@ -373,6 +373,10 @@ html, body{
   -webkit-app-region: no-drag;
 }
 
+.custom-button:disabled{
+  cursor: default;
+}
+
 .friend-button, .visitedButton, #self-button, .setting-button, .feed-user-button {
   border-radius: 8px;
   width: 90%;
@@ -413,7 +417,7 @@ html, body{
   font-size: 16px;
 }
 
-.login-button:hover {
+.login-button:hover, .custom-button:hover {
   background-color: #c65584;
   color: white;
 }
@@ -488,6 +492,7 @@ html, body{
 @media (prefers-color-scheme: dark) {
   body {background: #333; color: white; }
   .custom-button , .setting-separator{background-color: #494949; color: white;}
+  .custom-button:disabled{background-color: #3c3c3c}
   .custom-input, #feed-input {background-color: #494949; color: #dedede; border: 2px solid #494949;}
   .theme-toggle, #login-theme-toggle{ background-image: url(../Images/Sun.png); background-size: contain; width: 20px;
     height: 20px; background-repeat: no-repeat;}
@@ -503,6 +508,7 @@ html, body{
 @media (prefers-color-scheme: light) {
   body {background: #E9E8E8; color: #363636; }
   .custom-button {background-color: #c2c2c2; color: #363636;}
+  .custom-button:disabled{background-color: #d8d8d8;}
   .custom-input, #feed-input {background-color: #c2c2c2; color: #333333; border: 2px solid #c2c2c2;}
   .theme-toggle, #login-theme-toggle{ background-image: url(../Images/Moon_light.png); background-size: contain; width: 20px;
     height: 20px; background-repeat: no-repeat;}

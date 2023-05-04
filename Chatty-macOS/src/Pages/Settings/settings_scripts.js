@@ -1,47 +1,29 @@
-document.getElementById('self-user').textContent = localStorage.getItem("username")
-document.getElementById('self-status').textContent = localStorage.getItem("status")
-document.getElementById('general-button').addEventListener("click", openGeneral)
-document.getElementById('profile-button').addEventListener("click", openProfile)
-document.getElementById('back-button').addEventListener("click", openMain)
+document.getElementById('add-friend-button').addEventListener("click", window.sections.openFriends)
+document.getElementById('back-button').addEventListener("click", window.sections.openMain)
 document.getElementById('status-button').addEventListener("click", changeStatus)
-document.getElementById('self-status').value = localStorage.getItem('userStatus')
-document.getElementById('pfp-input').addEventListener('change', imageUpload);
-document.getElementById('add-friend-button').addEventListener("click", openFriends)
+document.getElementById('pfp-input').addEventListener('change', enableUpload);
+document.getElementById('pfp-button').addEventListener('click', imageUpload);
+document.getElementById('pfp-button').disabled = true
 
-function openGeneral(){
-    location.href = "settings.html"
-}
-
-function openProfile(){
-
-}
-
-function openMain(){
-    location.href = "../Main/main.html"
-}
-
-function openFriends(){
-    location.href = "../Friends/friends.html"
+function enableUpload(){
+    document.getElementById('pfp-button').disabled = false;
 }
 
 async function imageUpload() {
+    const formData = new FormData();
     const imageFile = document.getElementById('pfp-input');
-    if (imageFile) {
-        const formData = new FormData();
-        formData.append('image', imageFile.files[0]);
-        console.log("Image data: " + formData)
-        fetch(`http://localhost:8080/upload-profile-image?token=${localStorage.getItem('token')}`, {
-            method: 'POST',
-            body: formData,
-        }).then(response => {
-            if (response.ok) {
-                console.log('Image uploaded successfully!');
-            } else {
-                console.error('Error uploading image:', response.statusText);
-            }
-        }).catch(error => {
-            console.error('Error uploading image:', error);
-        });
+    formData.append('image', imageFile.files[0]);
+    formData.append('username', localStorage.getItem('username'));
+// end AJAX request
+    const response = await fetch('http://localhost:3000/api/images', {
+        method: 'POST',
+        body: formData
+    });
+    if (response.ok) {
+        const data = await response.json();
+        const imageUrl = data.url;
+        localStorage.setItem('selfProfilePicture', imageUrl)
+        window.location.reload()
     }
 }
 
@@ -50,11 +32,8 @@ async function changeStatus(){
     const newUsername = ""
     const newPassword = ""
     const username = localStorage.getItem("username")
-    localStorage.setItem('status', newStatus)
-    document.getElementById('status-input').value = "";
-    window.electron.reloadPage()
     try {
-        const response = await fetch('http://localhost:8080/change_profile', {
+        const response = await fetch('http://localhost:3000/change_profile', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -64,6 +43,11 @@ async function changeStatus(){
         if(!response.ok) {
             //document.getElementById('error-label').style.visibility = "visible"
             throw new Error('Profile change failed');
+        }
+        if (response.ok){
+            localStorage.setItem('status', newStatus)
+            document.getElementById('status-input').value = "";
+            window.electron.reloadPage()
         }
     } catch (err) {
         console.error(err);
