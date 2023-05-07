@@ -1,4 +1,69 @@
 const { contextBridge, ipcRenderer } = require('electron');
+ipcRenderer.on('message', (event, text, from)=>{
+    let today = new Date
+    let time = today.getHours() + ":" + today.getMinutes()
+    let friend = document.getElementById('visitedName').textContent
+    if (friend === from){
+        applyMessage(text, time)
+        fetch(`http://localhost:3000/read-friend?token=${localStorage.getItem('token')}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({friend}),
+        });
+    }
+    else{
+        const friendElements = document.querySelectorAll('.friend-name');
+        let friendElement;
+
+        for (const element of friendElements) {
+            if (element.textContent === from) {
+                friendElement = element;
+                break;
+            }
+        }
+        friendElement.parentNode.className = 'unread-button'
+    }
+})
+
+ipcRenderer.on('message-out', (event, from) => {
+    const friendElements = document.querySelectorAll('.friend-name');
+    let friendElement;
+
+    for (const element of friendElements) {
+        if (element.textContent === from) {
+            friendElement = element;
+            break;
+        }
+    }
+    friendElement.parentNode.className = 'unread-button'
+})
+
+function applyMessage(text, time){
+    let parent = document.getElementById('chat-div')
+    let feedMessage=document.createElement('div')
+    let feedBackground = document.createElement('div')
+    let feedText = document.createElement('div')
+    let chatHour = document.createElement('div')
+
+    feedText.textContent = text
+    chatHour.className = 'chat-hour'
+    chatHour.textContent = time
+    feedMessage.className = 'friend-message'
+    feedBackground.className = 'friend-message-background'
+    feedText.className = 'friend-message-content'
+    chatHour.style.textAlign = "left"
+
+
+    parent.appendChild(feedMessage)
+    feedMessage.appendChild(chatHour)
+    feedMessage.appendChild(feedBackground)
+    feedBackground.appendChild(feedText)
+
+    let feed = document.getElementById('lobby-feed')
+    feed.scrollTop = feed.scrollHeight - feed.clientHeight;
+}
 
 contextBridge.exposeInMainWorld('darkMode', {
     toggle: () => ipcRenderer.invoke('dark-mode:toggle'),
@@ -59,12 +124,26 @@ contextBridge.exposeInMainWorld('appends', {
             },
             body: JSON.stringify({}),
         });
+
+        const respondeUnreads = await fetch(`http://localhost:3000/request-unreads?token=${localStorage.getItem('token')}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({}),
+        });
         if (!response.ok) {
             console.log("Error when loading feed")
             throw new Error('request failed');
         }
         if (response.ok) {
             const data = await response.json();
+            let unreads;
+            if (respondeUnreads.ok){
+                const dataUnreads = await respondeUnreads.json();
+                unreads = dataUnreads.unreads;
+                console.log(unreads)
+            }
             const friendships = data.friends;
             for (let i = friendships.length - 1; i >= 0; i--) {
                 let url
@@ -76,7 +155,7 @@ contextBridge.exposeInMainWorld('appends', {
                     },
                     body: JSON.stringify({username}),
                 })
-                if (response.ok) {
+                if (responsePFP.ok) {
                     const data = await responsePFP.json();
                     url = data.url
                 }
@@ -91,7 +170,13 @@ contextBridge.exposeInMainWorld('appends', {
 
                 userItem.className = 'user-item'
                 friendButton.className = 'friend-button'
-                friendButton.id = "friend-button"
+
+                for (let j = unreads.length - 1; j >= 0; j--) {
+                    if (unreads[j].friend === friendships[i].username){
+                        friendButton.className = 'unread-button'
+                    }
+                }
+
                 friendName.className = 'friend-name'
                 pfp.className = 'user-pfp'
                 pfp.src = "http://localhost:3000" + url
@@ -114,7 +199,8 @@ contextBridge.exposeInMainWorld('appends', {
 
                 if (mode === 'chat'){
                     if (friendName.textContent === localStorage.getItem("userdata").split(" ")[0]){
-                        friendButton.className = "visitedButton"
+                        friendButton.id = "visitedButton"
+                        friendName.id = 'visitedName'
                         friendButton.role = "button"
                     }
                 }

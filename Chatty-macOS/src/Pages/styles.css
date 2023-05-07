@@ -140,7 +140,7 @@ html, body{
 }
 
 .chat-div{
-  margin-top: -2rem;
+  margin-top: 5rem;
   overflow-y: scroll;
   flex: 1;
   overflow: visible;
@@ -186,16 +186,18 @@ html, body{
   margin-top: 2rem;
   margin-right: 4rem;
   display: grid;
-  grid-template-columns: 10% 28%;
+  grid-template-columns: 12% 10%;
   grid-template-rows: 15%;
 }
 
 .chat-bar{
   align-items: center;
-  margin-top: 1.5rem;
   display: grid;
-  grid-template-columns: 5% 95%;
-  grid-template-rows: 15%;
+  position: fixed;
+  width: 100%;
+  column-gap: 1rem;
+  grid-template-columns: 5% 60%;
+  grid-template-rows: 80%;
 }
 
 
@@ -229,7 +231,7 @@ html, body{
   top: 5px;
 }
 
-.friend-button, .setting-button{
+.friend-button, .setting-button, .unread-button{
   text-align:left;
   width: 90%;
   background-color: transparent;
@@ -377,7 +379,7 @@ html, body{
   cursor: default;
 }
 
-.friend-button, .visitedButton, #self-button, .setting-button, .feed-user-button {
+.friend-button, .unread-button, #visitedButton, #self-button, .setting-button, .feed-user-button {
   border-radius: 8px;
   width: 90%;
   align-items: center;
@@ -408,10 +410,16 @@ html, body{
   width: 35%;
 }
 
-.friend-button, .visitedButton{
+.friend-button, .unread-button, #visitedButton{
   min-height: 3.7rem;
 }
 
+.unread-button{
+  background-image: url("../Images/badge.png");
+  background-size: 0.7rem;
+  background-position: center right 1rem;
+  background-repeat: no-repeat;
+}
 
 .login-button{
   font-size: 16px;
@@ -490,7 +498,7 @@ html, body{
 }
 
 @media (prefers-color-scheme: dark) {
-  body {background: #333; color: white; }
+  body, .chat-bar {background: #333; color: white; }
   .custom-button , .setting-separator{background-color: #494949; color: white;}
   .custom-button:disabled{background-color: #3c3c3c}
   .custom-input, #feed-input {background-color: #494949; color: #dedede; border: 2px solid #494949;}
@@ -498,15 +506,15 @@ html, body{
     height: 20px; background-repeat: no-repeat;}
   #friend-button-image{content: url("../Images/add-friend-button-dark.png")}
   .lobby-body{  background: linear-gradient(to right, #494949 30%, #333 0%);}
-  .friend-button:hover, #friend-button-search:hover, .profile:hover, .setting-button:hover, .feed-message-background{background-color: #3A3A3AB2;}
-  .friend-button, .setting-button, .feed-user-button, #self-user{color: #f2f3f5;}
+  .friend-button:hover, .unread-button:hover, #friend-button-search:hover, .profile:hover, .setting-button:hover, .feed-message-background{background-color: #3A3A3AB2;}
+  .friend-button, .unread-button, .setting-button, .feed-user-button, #self-user{color: #f2f3f5;}
   .feed-message{color: #dcdee1}
   .friend-status, .feed-date, .chat-date, .chat-hour{color: #b6b6b6;}
-  .visitedButton{background-color: #3A3A3AB2; color: white;}
+  #visitedButton{background-color: #3A3A3AB2; color: white;}
 }
 
 @media (prefers-color-scheme: light) {
-  body {background: #E9E8E8; color: #363636; }
+  body, .chat-bar {background: #E9E8E8; color: #363636; }
   .custom-button {background-color: #c2c2c2; color: #363636;}
   .custom-button:disabled{background-color: #d8d8d8;}
   .custom-input, #feed-input {background-color: #c2c2c2; color: #333333; border: 2px solid #c2c2c2;}
@@ -516,8 +524,8 @@ html, body{
   .lobby-body{background: linear-gradient(to right, #dadada 30%, #E9E8E8 0%)}
   #feed-input, #send-feed-button, .feed-message-background{background-color: #dadada; border-color: #dadada;}
   #feed-input:focus {border-color: #c65584;}
-  .friend-button:hover,  #friend-button-search:hover, .profile:hover, .setting-button:hover, .setting-separator {background-color: #c4c4c4;}
-  .friend-button, .setting-button{color: #363636;}
+  .friend-button:hover, .unread-button:hover,  #friend-button-search:hover, .profile:hover, .setting-button:hover, .setting-separator {background-color: #c4c4c4;}
+  .friend-button, .unread-button, .setting-button{color: #363636;}
   .friend-status, .feed-date, .chat-date, .chat-hour, #chat-status{color: #696969;}
-  .visitedButton{background-color: #adadad; color: #363636;}
+  #visitedButton{background-color: #adadad; color: #363636;}
 }

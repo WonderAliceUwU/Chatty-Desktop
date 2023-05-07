@@ -20,7 +20,6 @@ window.onload = async function () {
      if (response.ok) {
          const data = await response.json();
          const feed = data.feed;
-         console.log(data.feed);
          for (let i = feed.length-1; i >= 0; i--){
              applyFeed(feed[i].message, window.utils.getMonthName(feed[i].createdAt.slice(6, 7)).slice(0, 3) + ' ' + feed[i].createdAt.slice(8,10), feed[i].username)
              }

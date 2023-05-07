@@ -1,5 +1,7 @@
 document.getElementById('self-user').textContent = localStorage.getItem("username")
-document.getElementById('self-status').textContent = localStorage.getItem("status")
+if (localStorage.getItem('status') !== null){
+    document.getElementById('self-status').textContent = localStorage.getItem("status")
+}
 document.getElementById('self-pfp').src = 'http://localhost:3000'+localStorage.getItem('selfProfilePicture')
 
 document.getElementById('toggle-dark-mode').addEventListener('click', async () => {

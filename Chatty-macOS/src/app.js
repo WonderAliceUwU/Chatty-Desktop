@@ -3,6 +3,7 @@ const path = require('path');
 const net = require('net');
 const electron = require("electron");
 const WebSocket = require('websocket').w3cwebsocket;
+const io = require('socket.io-client');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -50,33 +51,25 @@ const createWindow = () => {
     BrowserWindow.getFocusedWindow().webContents.reloadIgnoringCache()
   })
 
-  ipcMain.handle('connect-server', (event, token) =>{
-    if (!token) {
-      // If there is no JWT token, redirect to the login page
-      window.location.href = '../Login/login.html';
-    }
-
-    const socket = new WebSocket(`ws://localhost:3000/?token=${token}`);
-
-    socket.addEventListener('open', () => {
-      console.log('WebSocket connection established');
+  ipcMain.handle('connect-server', (event, username) =>{
+    const socket = io('http://localhost:3000', {
+      query: { username: username }
     });
 
-    ipcMain.handle('receive-message', () =>{
-      socket.addEventListener('message', (event) => {
-        const message = JSON.parse(event.data);
-
-        const li = document.createElement('li');
-        li.textContent = `${message.username}: ${message.text}`;
-
-        const messagesList = document.querySelector('#messages');
-        messagesList.appendChild(li);
-      });
-    })
-
-    socket.addEventListener('close', () => {
-      console.log('WebSocket connection closed');
+// Listen for incoming messages
+    socket.on('message', ({ from, text }) => {
+      let location = mainWindow.webContents.getURL()
+      let lastIndex = location.lastIndexOf('html')
+      location = location.slice(lastIndex - 5, lastIndex -1)
+      if (location === 'chat'){
+        mainWindow.webContents.send('message', text, from)
+      }
+      else{
+        mainWindow.webContents.send('message-out', from)
+      }
+      console.log(`Received message from ${from}: ${text}`);
     });
+
   })
 };
 

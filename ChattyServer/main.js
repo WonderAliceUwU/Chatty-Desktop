@@ -2,20 +2,27 @@ const express = require('express');
 const expressWs = require('express-ws');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const { User,FeedMessages,Messages, sequelize, Friendships, Images} = require('./models');
+const { User,FeedMessages,Messages, sequelize, Friendships, Images, Unreads} = require('./models');
 const app = express();
 const wsInstance = expressWs(app);
 const JWT_SECRET = 'Wonder4liceChattyKey';
 const CryptoJS = require("crypto-js");
 const multer = require('multer');
 const {where, Op} = require("sequelize");
+const http = require('http');
+const socketio = require('socket.io');
+
+const server = http.createServer(app);
+const io = socketio(server);
+
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
         cb(null, 'uploads/');
     },
     filename: function(req, file, cb) {
-        cb(null, file.originalname);
+        const timestamp = Date.now();
+        cb(null, `${timestamp}-${file.originalname}`);
     }
 });
 
@@ -269,6 +276,40 @@ app.post('/request-chat', async (req, res) =>{
     })
 })
 
+app.post('/request-unreads', async (req, res) =>{
+    const token = req.url.split('?token=')[1];
+    if (!token) {
+        console.log('request-rejected')
+        res.status(401);
+    }
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const { username } = decoded;
+    await Unreads.findAll({
+        where: {
+            username: username}
+    }).then(async unreads => {
+        res.status(200).json({unreads});
+    })
+})
+
+app.post('/read-friend', async (req, res) =>{
+    const {friend} = req.body;
+    const token = req.url.split('?token=')[1];
+    if (!token) {
+        console.log('request-rejected')
+        res.status(401);
+    }
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const { username } = decoded;
+    await Unreads.destroy({
+        where: {
+            username: username,
+            friend: friend}
+    }).then(async unreads => {
+        res.status(200).json({message: 'Messages read correctly'});
+    })
+})
+
 app.post('/register', async (req, res) => {
     const {username, password} = req.body;
 
@@ -345,9 +386,19 @@ app.post('/send-message', async(req, res) => {
             friend: friend,
             message: text,
         }).then((user) => {
-            //TODO finish send message function
-            res.status(200).json({message: 'Message sent succesfully'});
-            console.log('Recieved message: ' + text + ' from ' + username)
+            io.to(friend).emit('message', { from: username, text });
+            Unreads.findOrCreate({
+                where:{
+                    username: friend,
+                    friend: username
+                },
+                defaults: { // set the default properties if it doesn't exist
+                    username: friend,
+                    friend: username
+                }
+            }).then(result => {
+                res.status(200).json({message: 'Message sent succesfully'});
+            })
         }).catch((error) => {
             console.log('Error creating message: ', error);
             res.status(401).json({error: 'Error creating message'});
@@ -417,10 +468,28 @@ app.post('/api/images', upload.single('image'), (req, res) => {
     })
 });
 
+// Start the server and listen for WebSocket connections
+server.listen(3000, () => {
+    console.log(`Server started on port ${3000}`);
+});
+
+// Handle WebSocket connections
+io.on('connection', (socket) => {
+    // Get the username from the socket query parameters
+    const { username } = socket.handshake.query;
+
+    // Join a room named after the username
+    socket.join(username);
+
+    // Handle disconnection
+    socket.on('disconnect', () => {
+        console.log(`${username} disconnected`);
+    });
+});
 
 
 // Handle incoming WebSocket connections
-app.ws('/', (socket, req) => {
+/*app.ws('/', (socket, req) => {
     // Check for a valid JWT token in the request headers
     const authHeader = req.headers.authorization;
     const token = req.url.split('?token=')[1];
@@ -465,4 +534,4 @@ app.ws('/', (socket, req) => {
 // Start the HTTP server
 app.listen(3000, () => {
     console.log('HTTP server listening on port 8080');
-});
+});*/

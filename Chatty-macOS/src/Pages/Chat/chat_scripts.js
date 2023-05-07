@@ -43,6 +43,13 @@ window.onload = async function () {
             applyMessage(feed[i].message, feed[i].username, feed[i].createdAt.slice(11,16))
         }
     }
+    await fetch(`http://localhost:3000/read-friend?token=${localStorage.getItem('token')}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({friend}),
+    });
     await window.appends.appendFriendList('chat')
 }
 
@@ -73,6 +80,9 @@ function applyMessage(text, username, hour){
     feedMessage.appendChild(chatHour)
     feedMessage.appendChild(feedBackground)
     feedBackground.appendChild(feedText)
+
+    let feed = document.getElementById('lobby-feed')
+    feed.scrollTop = feed.scrollHeight - feed.clientHeight;
 }
 
 function sendMessage(text){

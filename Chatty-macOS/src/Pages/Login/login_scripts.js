@@ -29,7 +29,7 @@ async function login(){
                 localStorage.setItem('username', username)
                 localStorage.setItem('status', data.status)
                 localStorage.setItem('selfProfilePicture', data.pfp)
-                await window.electron.connectServer(token).then(r => {
+                await window.electron.connectServer(username).then(r => {
                     location.href = '../Main/main.html'
                 })
             }

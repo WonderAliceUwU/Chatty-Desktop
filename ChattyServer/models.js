@@ -17,7 +17,6 @@ const sequelize = new Sequelize(
             timezone: "+02:00"
         },
         timezone: "+02:00", //for writing to database
-        operatorsAliases: false
     }
 );
 module.exports = sequelize;
@@ -84,6 +83,21 @@ const FeedMessages = sequelize.define('FeedMessages', {
     // Other model options go here
 });
 
+const Unreads = sequelize.define('Unreads', {
+    // Model attributes are defined here
+    username: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    friend: {
+        type: DataTypes.STRING,
+        allowNull: false
+        // allowNull defaults to true
+    }
+}, {
+    // Other model options go here
+});
+
 const Messages = sequelize.define('Messages', {
     // Model attributes are defined here
     username: {
@@ -129,6 +143,7 @@ module.exports = {
     Messages,
     Images,
     Friendships,
+    Unreads,
     sequelize,
 };
 //sequelize.sync({force: true})
