@@ -5,7 +5,7 @@ let fullname = localStorage.getItem("userdata")
 let friendStatus = fullname.slice(fullname.indexOf(" "))
 document.getElementById('chat-username').textContent = fullname.split(" ")[0]
 document.getElementById('chat-status').textContent = friendStatus
-let input = document.getElementById("feed-input");
+let input = document.getElementById("input");
 let friendPFP = document.getElementById('chat-pfp')
 
 
@@ -112,13 +112,13 @@ function sendMessage(text){
 input.addEventListener("keypress", function(event) {
     // If the user presses the "Enter" key on the keyboard
     if (event.key === "Enter") {
-        let message = input.value
+        let message = input.textContent
         if ((message !== null) && (message !== " ") && (message !== "")){
             // Cancel the default action, if needed
             event.preventDefault();
             // Trigger the button element with a click
             sendMessage(message)
-            input.value = ""
+            input.textContent = ""
         }
     }
 });

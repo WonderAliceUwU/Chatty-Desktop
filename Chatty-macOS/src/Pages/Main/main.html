@@ -29,7 +29,10 @@
     <button id="add-friend-button"><img src="../../Images/add-friend-button-light.png" id="friend-button-image"> </button>
   </div>
     <div class="feed-fields">
-      <input type="text" id="feed-input" placeholder="What's happening?">
+        <div id="input-wrapper">
+          <div id="input" contentEditable placeholder="What's happening?"
+               oninput="if(this.innerHTML.trim()==='<br>')this.innerHTML=''"></div>
+        </div>
     </div>
   </body>
   <script src="../../renderer.js"></script>

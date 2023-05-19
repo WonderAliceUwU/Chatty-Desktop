@@ -1,6 +1,7 @@
 document.getElementById('add-friend-button').addEventListener("click", window.sections.openFriends)
 document.getElementById('self-button').addEventListener("click", window.sections.openSettings)
-let input = document.getElementById("feed-input");
+let input = document.getElementById("input");
+
 
 window.onload = async function () {
      const username = localStorage.getItem('username')
@@ -82,19 +83,19 @@ function uploadFeed(text){
 input.addEventListener("keypress", function(event) {
     // If the user presses the "Enter" key on the keyboard
     if (event.key === "Enter") {
-        let message = input.value
+        let message = input.textContent
         if ((message !== null) && (message !== " ") && (message !== "")){
             // Cancel the default action, if needed
             event.preventDefault();
             // Trigger the button element with a click
             uploadFeed(message)
             let today = new Date
-            let day = "0"
-            if(today.getDay() < 10){day = "0" + today.getDay()}
-            else {day = today.getDay()}
+            let day
+            if(today.getDate() < 10){day = "0" + today.getDate()}
+            else {day = today.getDate()}
             let time = window.utils.getMonthName(today.getMonth() + 1).slice(0, 3) + " " + day
             applyFeed(message, time, localStorage.getItem('username'))
-            input.value = ""
+            input.textContent = ""
         }
     }
 });

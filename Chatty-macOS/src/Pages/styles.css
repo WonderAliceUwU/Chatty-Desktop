@@ -29,6 +29,7 @@ html, body{
   margin-right: 0.5rem;
   align-items: center;
   transition: all 200ms;
+  align-items: normal;
 }
 
 
@@ -57,6 +58,19 @@ html, body{
   text-align: center;
   display: grid;
   grid-template-columns: 30% 70%;
+  grid-template-rows: 87%;
+  column-gap: 1rem;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+.setting-body{
+  font-family: 'CustomRegular', sans-serif;
+  margin: auto;
+  margin-top: 0.5rem;
+  text-align: center;
+  display: grid;
+  grid-template-columns: 10% 90%;
   grid-template-rows: 87%;
   column-gap: 1rem;
   overflow-y: hidden;
@@ -188,6 +202,7 @@ html, body{
   display: grid;
   grid-template-columns: 12% 10%;
   grid-template-rows: 15%;
+  margin-bottom: -1rem;
 }
 
 .chat-bar{
@@ -200,6 +215,48 @@ html, body{
   grid-template-rows: 80%;
 }
 
+#input {
+  min-height: 1em; /* prevent height collapsing when there is no text */
+  max-height: 12rem;
+  width: 100%;
+  align-content: center;
+  outline: none;
+  overflow: hidden;
+  padding-right: 1.5rem;
+  cursor: text;
+}
+
+#input-wrapper {
+  width: 100%;
+  border-radius: 6px;
+  padding: 0.5rem;
+  max-height: 13rem;
+  text-align: start;
+  position: absolute;
+  bottom: 1rem;
+  background-image: url('../Images/send-message.png');
+  background-position: center right 0.5rem;
+  background-size: 22px;
+  background-repeat: no-repeat;
+  font-family: CustomRegular, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.5;
+  transition: box-shadow 100ms ease-in, border 100ms ease-in, background-color 100ms ease-in;
+  outline: none;
+  z-index: 1;
+  -webkit-app-region: no-drag;
+  margin-right: 10px;
+  margin-top: 1rem;
+  border-style: inset;
+}
+
+[contenteditable][placeholder]:empty:before {
+  content: attr(placeholder);
+  position: absolute;
+  color: gray;
+  background-color: transparent;
+}
 
 #feed-input{
   font-family: CustomRegular, sans-serif;
@@ -247,11 +304,26 @@ html, body{
   border-radius: 50%;
 }
 
+.setting-pfp{
+  width:50px;
+  height:50px;
+  z-index: 2;
+  border-radius: 50%;
+}
 .chat-pfp{
   width:45px;
   height:45px;
   z-index: 2;
   border-radius: 50%;
+}
+
+.unselectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .chat-hour{
@@ -299,6 +371,8 @@ html, body{
 .lobby-feed{
   text-align: center;
   overflow-y: auto;
+  height: 100%;
+  margin-top: 0.5rem;
 }
 
 #side-menu{
@@ -379,6 +453,21 @@ html, body{
   cursor: default;
 }
 
+.profile-setting-div{
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  width: 79%;
+  border-radius: 1rem;
+}
+
+.profile-setting-background{
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
 .friend-button, .unread-button, #visitedButton, #self-button, .setting-button, .feed-user-button {
   border-radius: 8px;
   width: 90%;
@@ -414,6 +503,15 @@ html, body{
   min-height: 3.7rem;
 }
 
+#profile-setting{
+  width: 38%;
+  display: grid;
+  align-items: center;
+  column-count: 2;
+  justify-content: center;
+  grid-template-columns: 10% 90%;
+  cursor: default;
+}
 .unread-button{
   background-image: url("../Images/badge.png");
   background-size: 0.7rem;
@@ -498,10 +596,12 @@ html, body{
 }
 
 @media (prefers-color-scheme: dark) {
-  body, .chat-bar {background: #333; color: white; }
+  body, .chat-bar, .setting-body {background: #333; color: white; }
   .custom-button , .setting-separator{background-color: #494949; color: white;}
-  .custom-button:disabled{background-color: #3c3c3c}
-  .custom-input, #feed-input {background-color: #494949; color: #dedede; border: 2px solid #494949;}
+  .custom-button:disabled{background-color: #3d3d3d
+  }
+  .profile-setting-background{background: #3a3a3a}
+  .custom-input, #feed-input, #input-wrapper {background-color: #494949; color: #dedede; border: 2px solid #494949;}
   .theme-toggle, #login-theme-toggle{ background-image: url(../Images/Sun.png); background-size: contain; width: 20px;
     height: 20px; background-repeat: no-repeat;}
   #friend-button-image{content: url("../Images/add-friend-button-dark.png")}
@@ -514,16 +614,17 @@ html, body{
 }
 
 @media (prefers-color-scheme: light) {
-  body, .chat-bar {background: #E9E8E8; color: #363636; }
+  body, .chat-bar, .setting-body {background: #E9E8E8; color: #363636; }
   .custom-button {background-color: #c2c2c2; color: #363636;}
-  .custom-button:disabled{background-color: #d8d8d8;}
-  .custom-input, #feed-input {background-color: #c2c2c2; color: #333333; border: 2px solid #c2c2c2;}
+  .custom-button:disabled{background-color: #d2d2d2;}
+  .profile-setting-background{background: #dadada
+  }
+  .custom-input, #feed-input, #input-wrapper {background-color: #c2c2c2; color: #333333; border: 2px solid #c2c2c2;}
   .theme-toggle, #login-theme-toggle{ background-image: url(../Images/Moon_light.png); background-size: contain; width: 20px;
     height: 20px; background-repeat: no-repeat;}
   #friend-button-image{content: url("../Images/add-friend-button-light.png")}
   .lobby-body{background: linear-gradient(to right, #dadada 30%, #E9E8E8 0%)}
-  #feed-input, #send-feed-button, .feed-message-background{background-color: #dadada; border-color: #dadada;}
-  #feed-input:focus {border-color: #c65584;}
+  #feed-input, #input-wrapper, #send-feed-button, .feed-message-background{background-color: #dadada; border-color: #dadada;}
   .friend-button:hover, .unread-button:hover,  #friend-button-search:hover, .profile:hover, .setting-button:hover, .setting-separator {background-color: #c4c4c4;}
   .friend-button, .unread-button, .setting-button{color: #363636;}
   .friend-status, .feed-date, .chat-date, .chat-hour, #chat-status{color: #696969;}

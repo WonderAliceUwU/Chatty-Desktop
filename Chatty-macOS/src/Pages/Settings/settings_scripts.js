@@ -1,14 +1,17 @@
-document.getElementById('add-friend-button').addEventListener("click", window.sections.openFriends)
 document.getElementById('back-button').addEventListener("click", window.sections.openMain)
 document.getElementById('status-button').addEventListener("click", changeStatus)
 document.getElementById('pfp-input').addEventListener('change', enableUpload);
 document.getElementById('pfp-button').addEventListener('click', imageUpload);
+document.getElementById('logout-button').addEventListener('click', logout);
 document.getElementById('pfp-button').disabled = true
 
 function enableUpload(){
     document.getElementById('pfp-button').disabled = false;
 }
 
+function logout(){
+    location.href = '../Login/login.html'
+}
 async function imageUpload() {
     const formData = new FormData();
     const imageFile = document.getElementById('pfp-input');

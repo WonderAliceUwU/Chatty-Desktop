@@ -4,71 +4,55 @@
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="../styles.css"/>
   </head>
-  <body class="lobby-body">
-    <div class= "side-menu" id="side-menu">
-      <img src="../../Images/Logo.png" alt="pfp" style="width: 35px; height: 35px">
-      <div class="menu-item">
-        <div class="user-item">
-          <button class="setting-button" id="general-button" role="button">
-            General
-          </button>
-        </div>
-        <div class="user-item">
-          <button class="setting-button" id="profile-button" role="button">
-            Profile
-          </button>
-        </div>
-        <div class="user-item">
-          <button class="setting-button" id="appearance-button" role="button">
-            Appearance
-          </button>
-        </div>
-        <div class="user-item">
-          <button class="setting-button" id="logout-button" role="button">
-            Log Out
-          </button>
-        </div>
-        <div class="user-item">
-          <button class="setting-button" id="back-button" role="button">
-            <
-          </button>
-        </div>
-      </div>
+  <body class="setting-body">
+    <div class="side">
+      <button class="setting-button" id="back-button" role="button" style="margin-top: 1.5rem">
+        <
+      </button>
     </div>
-    <div class="lobby-feed">
+    <div class="lobby-feed unselectable" style="height: 105%">
+      <h1 class="setting-name" style="margin-top: 1rem; margin-bottom: 0">Settings</h1>
       <div class="setting-item">
         <h2 class="setting-name">General</h2>
-        <hr class="setting-separator">
+        <div class="profile-setting-div">
+          <div class="profile-setting-background">
+            <medium>Log Out: </medium><button class="custom-button" id="logout-button" style="margin-left: 1rem">🔐</button>
+          </div>
+        </div>
       </div>
       <div class="setting-item">
         <h2 class="setting-name">Profile</h2>
-        <hr class="setting-separator">
-        <div style="display: flex; align-items: center; ">
-          <h3>Profile picture:</h3>
-          <input class="custom-input" id="pfp-input" placeholder="Put a new status" type="file" style="margin-left: 1rem; margin-right: 1rem; width: 60%">
-          <button class="custom-button" id="pfp-button">Upload</button>
-        </div>
-        <div style="display: flex; align-items: center; ">
-          <h3>Status:</h3>
-          <input class="custom-input" id="status-input" placeholder="Put a new status" style="margin-left: 1rem; margin-right: 1rem; width: 60%">
-          <button class="custom-button" id="status-button">Change</button>
+        <div class="profile-setting-div">
+          <div class="profile-setting-background" style="display: flex; flex-direction: column;  align-items: start;">
+            <div id="profile-setting">
+              <img class="setting-pfp" id="self-pfp" style="margin-left: 0.5rem" src="" alt="pfp">
+              <div style="font-size: 1.2rem">
+                <medium id="self-user">Sample text</medium>
+                <div class="friend-status" id="self-status">Sample text</div>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; ">
+              <h3>Profile picture:</h3>
+              <input class="custom-input" id="pfp-input" placeholder="Put a new status" type="file" style="margin-left: 1rem; margin-right: 1rem; width: 60%">
+              <button class="custom-button" id="pfp-button">Upload</button>
+            </div>
+            <div style="display: flex; align-items: center; ">
+              <h3>Status:</h3>
+              <input class="custom-input" id="status-input" placeholder="Put a new status" style="margin-left: 1rem; margin-right: 1rem; width: 60%">
+              <button class="custom-button" id="status-button">Change</button>
+            </div>
+          </div>
         </div>
       </div>
       <div class="setting-item">
         <h2 class="setting-name">Appearance</h2>
-        <hr class="setting-separator">
-        <button class="theme-toggle" role="button" id="toggle-dark-mode">Mode: </button>
+          <div class="profile-setting-div">
+          <div class="profile-setting-background">
+          <medium>Toggle theme: </medium><button class="theme-toggle" role="button" id="toggle-dark-mode" style="margin-left: 1rem"></button>
+          </div>
+        </div>
       </div>
     </div>
-  </body>
-  <body class="footer">
-  <div class="profile">
-    <button id="self-button" style="width: 95%" role="button">
-      <img class="user-pfp" id="self-pfp" style="margin-left: 0.5rem" src="" alt="pfp"><medium id="self-user">Sample text</medium>
-      <div class="friend-status" id="self-status">Sample text</div>
-    </button>
-    <button id="add-friend-button"><img src="../../Images/add-friend-button-light.png" id="friend-button-image"> </button>
-  </div>
   </body>
   <script src="../../renderer.js"></script>
   <script src="settings_scripts.js"></script>

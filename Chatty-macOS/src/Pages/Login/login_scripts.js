@@ -1,5 +1,9 @@
 document.querySelector("#login-button").addEventListener("click", login)
 document.querySelector("#register-button").addEventListener("click", goRegister)
+document.getElementById('login-theme-toggle').addEventListener('click', async () => {
+    const isDarkMode = await window.darkMode.toggle()
+    document.getElementById('theme-source').innerHTML = isDarkMode ? 'Dark' : 'Light'
+})
 
 async function login(){
     const username = document.getElementById("UserInput").value;
