@@ -1,4 +1,6 @@
 const { contextBridge, ipcRenderer } = require('electron');
+
+
 ipcRenderer.on('message', (event, text, from)=>{
     let today = new Date
     let time = today.getHours() + ":" + today.getMinutes()
@@ -125,7 +127,7 @@ contextBridge.exposeInMainWorld('appends', {
             body: JSON.stringify({}),
         });
 
-        const respondeUnreads = await fetch(`http://localhost:3000/request-unreads?token=${localStorage.getItem('token')}`, {
+        const responseUnreads = await fetch(`http://localhost:3000/request-unreads?token=${localStorage.getItem('token')}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -139,8 +141,8 @@ contextBridge.exposeInMainWorld('appends', {
         if (response.ok) {
             const data = await response.json();
             let unreads;
-            if (respondeUnreads.ok){
-                const dataUnreads = await respondeUnreads.json();
+            if (responseUnreads.ok){
+                const dataUnreads = await responseUnreads.json();
                 unreads = dataUnreads.unreads;
                 console.log(unreads)
             }
@@ -204,6 +206,23 @@ contextBridge.exposeInMainWorld('appends', {
                         friendButton.role = "button"
                     }
                 }
+            }
+        }
+    },
+    async refreshFriendsList() {
+        const response = await fetch(`http://localhost:3000/request-friend-requests?token=${localStorage.getItem('token')}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({}),
+        });
+        if (response.ok) {
+            const data = await response.json();
+            const requestsFriends = data.requestsFriends;
+            console.log(data.requestsFriends)
+            if (requestsFriends.length > 0) {
+                document.getElementById('friend-button-image').id = 'friend-button-image-new'
             }
         }
     }

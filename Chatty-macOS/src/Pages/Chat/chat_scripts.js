@@ -51,6 +51,7 @@ window.onload = async function () {
         body: JSON.stringify({friend}),
     });
     await window.appends.appendFriendList('chat')
+    await window.appends.refreshFriendsList()
 }
 
 function applyMessage(text, username, hour){

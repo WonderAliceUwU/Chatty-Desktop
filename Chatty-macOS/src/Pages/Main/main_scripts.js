@@ -26,6 +26,7 @@ window.onload = async function () {
              }
      }
     await window.appends.appendFriendList()
+    await window.appends.refreshFriendsList()
 }
 
  async function applyFeed(message, date, username) {
