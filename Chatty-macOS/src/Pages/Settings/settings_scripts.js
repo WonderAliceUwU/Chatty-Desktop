@@ -50,7 +50,7 @@ async function changeStatus(){
         if (response.ok){
             localStorage.setItem('status', newStatus)
             document.getElementById('status-input').value = "";
-            window.electron.reloadPage()
+            await window.electron.reloadPage()
         }
     } catch (err) {
         console.error(err);

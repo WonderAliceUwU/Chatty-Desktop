@@ -1,5 +1,6 @@
 document.getElementById('add-friend-button').addEventListener("click", window.sections.openFriends)
 document.getElementById('self-button').addEventListener("click", window.sections.openSettings)
+document.getElementById('send-button').addEventListener("click", sendMessageAction)
 document.querySelector("#back-chat-button").addEventListener("click", window.sections.openMain)
 let fullname = localStorage.getItem("userdata")
 let friendStatus = fullname.slice(fullname.indexOf(" "))
@@ -113,13 +114,17 @@ function sendMessage(text){
 input.addEventListener("keypress", function(event) {
     // If the user presses the "Enter" key on the keyboard
     if (event.key === "Enter") {
-        let message = input.textContent
-        if ((message !== null) && (message !== " ") && (message !== "")){
-            // Cancel the default action, if needed
-            event.preventDefault();
-            // Trigger the button element with a click
-            sendMessage(message)
-            input.textContent = ""
-        }
+        sendMessageAction()
     }
 });
+
+function sendMessageAction(){
+    let message = input.textContent
+    if ((message !== null) && (message !== " ") && (message !== "")){
+        // Cancel the default action, if needed
+        event.preventDefault();
+        // Trigger the button element with a click
+        sendMessage(message)
+        input.textContent = ""
+    }
+}

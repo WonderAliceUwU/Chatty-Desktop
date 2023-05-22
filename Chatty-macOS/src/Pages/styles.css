@@ -25,7 +25,6 @@ html, body{
   border-radius: 8px;
   margin-left: 0.5rem;
   margin-right: 0.5rem;
-  align-items: center;
   transition: all 200ms;
   align-items: normal;
 }
@@ -51,8 +50,7 @@ html, body{
 
 .lobby-body{
   font-family: 'CustomRegular', sans-serif;
-  margin: auto;
-  margin-top: 0.5rem;
+  margin: 0.5rem auto auto;
   text-align: center;
   display: grid;
   grid-template-columns: 29.5% 68.5%;
@@ -64,8 +62,7 @@ html, body{
 
 .setting-body{
   font-family: 'CustomRegular', sans-serif;
-  margin: auto;
-  margin-top: 0.5rem;
+  margin: 0.5rem auto auto;
   text-align: center;
   display: grid;
   grid-template-columns: 10% 90%;
@@ -123,6 +120,25 @@ html, body{
   border: none;
 }
 
+.chat-image{
+  width: 15rem;
+  margin-bottom: 1rem;
+  margin-left: 1rem;
+  border-radius: 0.5rem;
+}
+
+.loading-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
 #add-friend-button{
   background: transparent;
   border: none;
@@ -153,9 +169,9 @@ html, body{
 
 .feed-div{
   margin-bottom: 50px;
-  overflow-y: scroll;
   flex: 1;
   overflow: visible;
+  position: relative;
 }
 
 .chat-div{
@@ -231,11 +247,9 @@ html, body{
   cursor: text;
 }
 
-
-
-#input-wrapper {
+#input-wrapper{
   width: 100%;
-  border-radius: 6px;
+  border-radius: 0.7rem;
   padding: 0.5rem;
   max-height: 13rem;
   text-align: start;
@@ -250,9 +264,31 @@ html, body{
   z-index: 1;
   -webkit-app-region: no-drag;
   display: grid;
-  grid-template-columns: 87% 7% 10%;
+  grid-template-columns: 79% 0 0 0;
+  column-gap: 2rem;
   margin-right: 10px;
   margin-top: 1rem;
+  align-items: center;
+  border-style: inset;
+}
+
+#image-wrapper{
+  width: 100%;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  text-align: start;
+  position: absolute;
+  bottom: 4.2rem;
+  font-family: CustomRegular, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.5;
+  transition: box-shadow 100ms ease-in, border 100ms ease-in, background-color 100ms ease-in;
+  outline: none;
+  z-index: 1;
+  visibility: hidden;
+  -webkit-app-region: no-drag;
+  display: flex;
   align-items: center;
   border-style: inset;
 }
@@ -548,7 +584,7 @@ html, body{
   width: 1.5rem;
   border: none;
   z-index: 1;
-  padding: 0px;
+  padding: 0;
   touch-action: manipulation;
   cursor: pointer;
   -webkit-app-region: no-drag;
@@ -562,7 +598,7 @@ html, body{
   width: 1.5rem;
   border: none;
   z-index: 1;
-  padding: 0px;
+  padding: 0;
   touch-action: manipulation;
   cursor: pointer;
   -webkit-app-region: no-drag;
@@ -623,19 +659,30 @@ html, body{
   background-color: transparent;
 }
 
+#image-button{
+  max-height: 30px;
+  height: 2rem;
+  width: 2rem;
+  background-image: url(../Images/upload-image-icon.png);
+  background-position: center;
+  background-size: 22px;
+  background-repeat: no-repeat;
+  background-color: transparent;
+}
+
 @media (prefers-color-scheme: dark) {
-  body, .chat-bar, .setting-body {background: #333; color: white; }
+  body, .chat-bar, .setting-body, .loading-screen {background: #333; color: white; }
   .custom-button , .setting-separator{background-color: #494949; color: white;}
-  .custom-button:disabled{background-color: #3d3d3d
-  }
+  .custom-button:disabled{background-color: #3d3d3d}
   .profile-setting-background{background: #3a3a3a}
   .custom-input, #feed-input, #input-wrapper {background-color: #494949; color: #dedede; border: 2px solid #494949;}
+  #image-wrapper{background-color: #494949; color: #dedede; border: 2px solid #c65584;}
   .theme-toggle, #login-theme-toggle{ background-image: url(../Images/Sun.png); background-size: contain; width: 20px;
     height: 20px; background-repeat: no-repeat;}
   #friend-button-image{content: url("../Images/add-friend-button-dark.png")}
   #friend-button-image-new{content: url("../Images/add-friend-button-dark-badged.png")}
   .lobby-body{  background: linear-gradient(to right, #494949 30%, #333 0%);}
-  .friend-button:hover, .unread-button:hover, #friend-button-search:hover, .profile:hover, .setting-button:hover, #emoji-button:hover, #send-button:hover, .feed-message-background{background-color: #3A3A3AB2;}
+  .friend-button:hover, .unread-button:hover, #friend-button-search:hover, .profile:hover, .setting-button:hover, #emoji-button:hover, #send-button:hover, #image-button:hover, .feed-message-background{background-color: #3A3A3AB2;}
   .friend-button, .unread-button, .setting-button, .feed-user-button, #self-user{color: #f2f3f5;}
   .feed-message{color: #dcdee1}
   ::-webkit-scrollbar-thumb{background-color: rgba(108, 108, 108, 0.7)
@@ -645,11 +692,10 @@ html, body{
 }
 
 @media (prefers-color-scheme: light) {
-  body, .chat-bar, .setting-body {background: #E9E8E8; color: #363636; }
+  body, .chat-bar, .setting-body, .loading-screen {background: #E9E8E8; color: #363636; }
   .custom-button {background-color: #c2c2c2; color: #363636;}
   .custom-button:disabled{background-color: #d2d2d2;}
-  .profile-setting-background{background: #dadada
-  }
+  .profile-setting-background{background: #dadada}
   .custom-input, #feed-input, #input-wrapper {background-color: #c2c2c2; color: #333333; border: 2px solid #c2c2c2;}
   .theme-toggle, #login-theme-toggle{ background-image: url(../Images/Moon_light.png); background-size: contain; width: 20px;
     height: 20px; background-repeat: no-repeat;}
@@ -657,7 +703,8 @@ html, body{
   #friend-button-image-new{content: url("../Images/add-friend-button-light-badged.png")}
   .lobby-body{background: linear-gradient(to right, #dadada 30%, #E9E8E8 0%)}
   #feed-input, #input-wrapper, #send-feed-button, .feed-message-background{background-color: #dadada; border-color: #dadada;}
-  .friend-button:hover, .unread-button:hover,  #friend-button-search:hover, .profile:hover, .setting-button:hover, .setting-separator, #emoji-button:hover, #send-button:hover {background-color: #c4c4c4;}
+  #image-wrapper{background-color: #dadada; border: 2px solid #c65584;}
+  .friend-button:hover, .unread-button:hover,  #friend-button-search:hover, .profile:hover, .setting-button:hover, .setting-separator, #emoji-button:hover, #send-button:hover, #image-button:hover {background-color: #c4c4c4;}
   .friend-button, .unread-button, .setting-button{color: #363636;}
   .friend-status, .feed-date, .chat-date, .chat-hour, #chat-status{color: #696969;}
   #visitedButton, ::-webkit-scrollbar-thumb{background-color: #adadad; color: #363636;}

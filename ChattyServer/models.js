@@ -78,6 +78,9 @@ const FeedMessages = sequelize.define('FeedMessages', {
         type: DataTypes.STRING,
         allowNull: false
         // allowNull defaults to true
+    },
+    imageFilename: {
+        type: DataTypes.STRING,
     }
 }, {
     // Other model options go here
@@ -112,6 +115,9 @@ const Messages = sequelize.define('Messages', {
         type: DataTypes.STRING,
         allowNull: false
         // allowNull defaults to true
+    },
+    imageFilename: {
+        type: DataTypes.STRING,
     }
 }, {
     // Other model options go here

@@ -132,8 +132,8 @@ app.post('/request-list-friend', async (req, res) => {
             where: {
                 username: {
                     [Op.in]: include,
-                },
-            }
+                }
+            },  order: [['username', 'DESC']]
         }).then(async friends => {
             res.status(200).json({friends});
         })
@@ -340,7 +340,8 @@ app.post('/register', async (req, res) => {
     });
 });
 
-app.post('/feed-message', async(req, res) => {
+
+app.post('/feed-message', upload.single('image'), (req, res) => {
     const message = req.body.text;
     const token = req.url.split('?token=')[1];
     if (!token) {
@@ -350,20 +351,41 @@ app.post('/feed-message', async(req, res) => {
     }
     const decoded = jwt.verify(token, JWT_SECRET);
     const { username } = decoded;
-
+    const {text} = req.body;
     sequelize.sync({force: false}).then(() => {
-        // Insert a user
-        FeedMessages.create({
-            username: username,
-            message: message,
-        }).then((user) => {
-            console.log('Feed created successfully:', user.toJSON());
-            res.status(200);
-            console.log('Received feed message: ' + message + ' from ' + username)
-        }).catch((error) => {
-            console.log('Error creating feed message: ', error);
-            res.status(401).json({error: 'Error creating feed message'});
-        })
+        if (req.file !== undefined) {
+            const {filename, mimetype} = req.file;
+            Images.create({
+                filename,
+                url: `/uploads/${filename}`,
+                mimetype,
+            })
+            FeedMessages.create({
+                username: username,
+                message: text,
+                imageFilename: filename,
+            }).then((user) => {
+                console.log('Feed created successfully:', user.toJSON());
+                res.status(200);
+                console.log('Received feed message: ' + message + ' from ' + username)
+            }).catch((error) => {
+                console.log('Error creating feed message: ', error);
+                res.status(401).json({error: 'Error creating feed message'});
+            })
+        }
+        else {
+            FeedMessages.create({
+                username: username,
+                message: text,
+            }).then((user) => {
+                console.log('Feed created successfully:', user.toJSON());
+                res.status(200);
+                console.log('Received feed message: ' + message + ' from ' + username)
+            }).catch((error) => {
+                console.log('Error creating feed message: ', error);
+                res.status(401).json({error: 'Error creating feed message'});
+            })
+        }
     })
 })
 

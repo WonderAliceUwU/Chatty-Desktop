@@ -16,7 +16,9 @@
         <img src="../../Images/feed.png" alt="pfp" style="width: 25px; height: 25px; margin-top: 4px">
       </div>
       <div class="feed-div" id="feed-div">
-
+        <div id="loading-screen" class="loading-screen">
+          <p class="loading-text">Loading...</p>
+        </div>
       </div>
     </div>
   </body>
@@ -29,9 +31,11 @@
     <button id="add-friend-button"><img src="../../Images/add-friend-button-light.png" id="friend-button-image"> </button>
   </div>
     <div class="feed-fields">
-        <div id="input-wrapper">
+      <div id="image-wrapper"></div>
+      <div id="input-wrapper">
           <div id="input" contentEditable placeholder="What's happening?" oninput="if(this.innerHTML.trim()==='<br>')this.innerHTML=''"></div>
           <button id="emoji-button" class="custom-button"><emoji-picker></emoji-picker></button>
+          <button id="image-button" class="custom-button"><input class="custom-input" id="image-input" type="file" style="visibility: hidden; width: 15rem;"></button>
           <button id="send-button" class="custom-button"></button>
         </div>
     </div>
