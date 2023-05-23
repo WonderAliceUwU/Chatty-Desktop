@@ -134,7 +134,13 @@ function sendMessageAction(){
         if(today.getDate() < 10){day = "0" + today.getDate()}
         else {day = today.getDate()}
         let time = window.utils.getMonthName(today.getMonth() + 1).slice(0, 3) + " " + day
-        reloadFeed()
+        if(fileInput.files.length === 0){
+            applyFeed(message, time, localStorage.getItem('username'), null)
+        }
+        else{
+            reloadFeed()
+        }
+        fileInput.value = '';
         input.textContent = ""
         document.getElementById('image-wrapper').innerHTML = '';
         document.getElementById('image-wrapper').style.visibility = 'hidden'
@@ -157,12 +163,10 @@ fileInput.addEventListener('change', () => {
         // Create an <img> element
         const img = document.createElement('img');
         img.src = imageUrl;
-        img.style.width = '50%'
-        img.style.height = '50%'
+        img.style.width = '15rem'
         img.style.borderRadius = '1rem'
 
-        // Clear any existing preview and append the new image
-        //imagePreview.innerHTML = '';
+        document.getElementById('image-wrapper').innerHTML = '';
         document.getElementById('image-wrapper').style.visibility = 'visible'
         document.getElementById('image-wrapper').appendChild(img);
     };

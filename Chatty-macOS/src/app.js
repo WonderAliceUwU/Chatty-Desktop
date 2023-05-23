@@ -57,12 +57,12 @@ const createWindow = () => {
     });
 
 // Listen for incoming messages
-    socket.on('message', ({ from, text }) => {
+    socket.on('message', ({ from, text, filename }) => {
       let location = mainWindow.webContents.getURL()
       let lastIndex = location.lastIndexOf('html')
       location = location.slice(lastIndex - 5, lastIndex -1)
       if (location === 'chat'){
-        mainWindow.webContents.send('message', text, from)
+        mainWindow.webContents.send('message', text, from, filename)
       }
       else{
         mainWindow.webContents.send('message-out', from)

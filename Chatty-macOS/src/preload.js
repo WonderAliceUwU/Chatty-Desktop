@@ -1,12 +1,18 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 
-ipcRenderer.on('message', (event, text, from)=>{
+ipcRenderer.on('message', (event, text, from, filename)=>{
     let today = new Date
     let time = today.getHours() + ":" + today.getMinutes()
     let friend = document.getElementById('visitedName').textContent
     if (friend === from){
-        applyMessage(text, time)
+        if (filename !== undefined){
+            applyMessage(text, time, filename)
+
+        }
+        else{
+            applyMessage(text, time, null)
+        }
         fetch(`http://localhost:3000/read-friend?token=${localStorage.getItem('token')}`, {
             method: 'POST',
             headers: {
@@ -42,7 +48,7 @@ ipcRenderer.on('message-out', (event, from) => {
     friendElement.parentNode.className = 'unread-button'
 })
 
-function applyMessage(text, time){
+function applyMessage(text, time, filename){
     let parent = document.getElementById('chat-div')
     let feedMessage=document.createElement('div')
     let feedBackground = document.createElement('div')
@@ -62,6 +68,13 @@ function applyMessage(text, time){
     feedMessage.appendChild(chatHour)
     feedMessage.appendChild(feedBackground)
     feedBackground.appendChild(feedText)
+
+    if (filename !== null){
+        let image = document.createElement('img')
+        image.className = 'message-image'
+        image.src = 'http://localhost:3000/uploads/' + filename
+        feedBackground.appendChild(image)
+    }
 
     let feed = document.getElementById('lobby-feed')
     feed.scrollTop = feed.scrollHeight - feed.clientHeight;

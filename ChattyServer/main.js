@@ -389,9 +389,9 @@ app.post('/feed-message', upload.single('image'), (req, res) => {
     })
 })
 
-app.post('/send-message', async(req, res) => {
-    //const message = req.body.text;
-    const {friend, text} = req.body;
+app.post('/send-message', upload.single('image'), (req, res) => {
+    const text = req.body.text;
+    const friend = req.body.friend;
     const token = req.url.split('?token=')[1];
     if (!token) {
         // If there is no JWT token, close the WebSocket connection
@@ -403,28 +403,63 @@ app.post('/send-message', async(req, res) => {
     const { username } = decoded;
 
     sequelize.sync({force: false}).then(() => {
-        Messages.create({
-            username: username,
-            friend: friend,
-            message: text,
-        }).then((user) => {
-            io.to(friend).emit('message', { from: username, text });
-            Unreads.findOrCreate({
-                where:{
-                    username: friend,
-                    friend: username
-                },
-                defaults: { // set the default properties if it doesn't exist
-                    username: friend,
-                    friend: username
-                }
-            }).then(result => {
-                res.status(200).json({message: 'Message sent succesfully'});
+        if (req.file !== undefined) {
+            const {filename, mimetype} = req.file;
+            Images.create({
+                filename,
+                url: `/uploads/${filename}`,
+                mimetype,
             })
-        }).catch((error) => {
-            console.log('Error creating message: ', error);
-            res.status(401).json({error: 'Error creating message'});
-        })
+
+            Messages.create({
+                username: username,
+                friend: friend,
+                message: text,
+                imageFilename: filename,
+            }).then((user) => {
+                io.to(friend).emit('message', { from: username, text, filename });
+                Unreads.findOrCreate({
+                    where:{
+                        username: friend,
+                        friend: username
+                    },
+                    defaults: { // set the default properties if it doesn't exist
+                        username: friend,
+                        friend: username
+                    }
+                }).then(result => {
+                    res.status(200).json({message: 'Message sent succesfully'});
+                })
+            }).catch((error) => {
+                console.log('Error creating message: ', error);
+                res.status(401).json({error: 'Error creating message'});
+            })
+        }
+        else {
+            Messages.create({
+                username: username,
+                friend: friend,
+                message: text,
+            }).then((user) => {
+                io.to(friend).emit('message', { from: username, text });
+                Unreads.findOrCreate({
+                    where:{
+                        username: friend,
+                        friend: username
+                    },
+                    defaults: { // set the default properties if it doesn't exist
+                        username: friend,
+                        friend: username
+                    }
+                }).then(result => {
+                    res.status(200).json({message: 'Message sent succesfully'});
+                })
+            }).catch((error) => {
+                console.log('Error creating message: ', error);
+                res.status(401).json({error: 'Error creating message'});
+            })
+        }
+
     })
 })
 
