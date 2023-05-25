@@ -5,7 +5,7 @@ if (localStorage.getItem('status') !== 'null'){
 else{
     document.getElementById('self-status').textContent = ' '
 }
-document.getElementById('self-pfp').src = 'http://localhost:3000'+localStorage.getItem('selfProfilePicture')
+document.getElementById('self-pfp').src = 'http://'+ localStorage.getItem('server') +localStorage.getItem('selfProfilePicture')
 
 let inputChat = document.getElementById('input')
 if (inputChat !== null){
@@ -24,11 +24,6 @@ function deactivateBorder(){
 }
 
 document.getElementById('toggle-dark-mode').addEventListener('click', async () => {
-    const isDarkMode = await window.darkMode.toggle()
-    document.getElementById('theme-source').innerHTML = isDarkMode ? 'Dark' : 'Light'
-})
-
-document.getElementById('login-theme-toggle').addEventListener('click', async () => {
     const isDarkMode = await window.darkMode.toggle()
     document.getElementById('theme-source').innerHTML = isDarkMode ? 'Dark' : 'Light'
 })

@@ -4,6 +4,7 @@ const net = require('net');
 const electron = require("electron");
 const WebSocket = require('websocket').w3cwebsocket;
 const io = require('socket.io-client');
+const storage = require('electron-json-storage');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -51,8 +52,8 @@ const createWindow = () => {
     BrowserWindow.getFocusedWindow().webContents.reloadIgnoringCache()
   })
 
-  ipcMain.handle('connect-server', (event, username) =>{
-    const socket = io('http://localhost:3000', {
+  ipcMain.handle('connect-server', (event, username, server) =>{
+    const socket = io('http://' + server, {
       query: { username: username }
     });
 

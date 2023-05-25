@@ -188,6 +188,34 @@ app.post('/accept-request', async (req, res) => {
     })
 })
 
+app.post('/unfriend', async (req, res) => {
+    const {friend} = req.body;
+    const token = req.url.split('?token=')[1];
+    if (!token) {
+        console.log('request-rejected')
+        res.status(401);
+    }
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const {username} = decoded;
+
+    sequelize.sync({force: false}).then(() => {
+        Friendships.destroy(
+        {where:
+                {username: friend,
+                friend: username,}
+        })
+        Friendships.destroy(
+            {where:
+                    {username: username,
+                    friend: friend,}
+        }).then(() => {
+            res.status(200).json({message: 'Request completed'});
+        }).catch((error) => {
+            res.status(401).json({error: 'Error sending request'});
+        })
+    })
+})
+
 app.post('/make-request', async (req, res) =>{
     const {target} = req.body;
     const token = req.url.split('?token=')[1];

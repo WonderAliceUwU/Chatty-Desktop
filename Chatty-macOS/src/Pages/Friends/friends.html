@@ -27,15 +27,21 @@
   </body>
   <body class="footer">
   <div class="profile">
-    <button id="self-button" style="width: 95%" role="button">
-      <img class="user-pfp" id="self-pfp" style="margin-left: 0.5rem" src="" alt="pfp"><medium id="self-user">Sample text</medium>
-      <div class="friend-status" id="self-status">Sample text</div>
+    <button id="self-button" role="button">
+      <img id="self-pfp" style="margin-left: 0.5rem" src="" alt="pfp">
+      <div style="display: flex; flex-direction: column">
+        <medium id="self-user">Sample text</medium>
+        <div class="friend-status" id="self-status">Sample text</div>
+      </div>
     </button>
     <button id="add-friend-button"><img src="../../Images/add-friend-button-light.png" id="friend-button-image"> </button>
   </div>
     <div class="feed-fields">
-      <input class="custom-input" input="text" id="feed-input" placeholder="Search for a friend!">
-    </div>
+      <div id="image-wrapper"></div>
+      <div id="input-wrapper">
+        <div id="input" contentEditable placeholder="What's happening?" oninput="if(this.innerHTML.trim()==='<br>')this.innerHTML=''"></div>
+        <button id="send-button" class="custom-button"></button>
+      </div>    </div>
   </body>
   <script src="../../renderer.js"></script>
   <script src="friends_scripts.js"></script>

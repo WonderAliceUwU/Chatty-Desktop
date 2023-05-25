@@ -10,14 +10,34 @@ let input = document.getElementById("input");
 let friendPFP = document.getElementById('chat-pfp')
 const uploadButton = document.getElementById('image-button');
 const fileInput = document.getElementById('image-input');
+const settingButton = document.getElementById('chat-setting-button');
+settingButton.addEventListener('click', toggleSettingContainer);
+document.getElementById('unfriend-button').addEventListener('click', unfriendAction)
+let friend = localStorage.getItem("userdata").split(" ")[0].replace(/\s+/g, '')
 
+function toggleSettingContainer() {
+    document.getElementById('setting-container').classList.toggle('show');
+}
 
+async function unfriendAction() {
+    const response = await fetch(`http://` + localStorage.getItem('server') + `/unfriend?token=${localStorage.getItem('token')}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({friend}),
+    });
+    if (!response.ok) {
+        console.log("Error when loading chat")
+    }
+    if (response.ok) {
+        location.href = '../Main/main.html'
+    }
+}
 
 window.onload = async function () {
-    let friend = localStorage.getItem("userdata").split(" ")[0].replace(/\s+/g, '')
-    friendPFP.src = "http://localhost:3000"+await window.utils.getProfileUrl(friend)
-    await refreshMessages()
-    await fetch(`http://localhost:3000/read-friend?token=${localStorage.getItem('token')}`, {
+    friendPFP.src = "http://" + localStorage.getItem('server') + await window.utils.getProfileUrl(friend)
+    await fetch(`http://` + localStorage.getItem('server') + `/read-friend?token=${localStorage.getItem('token')}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -26,11 +46,11 @@ window.onload = async function () {
     });
     await window.appends.appendFriendList('chat')
     await window.appends.refreshFriendsList()
+    await refreshMessages()
 }
 
 async function refreshMessages() {
-    let friend = localStorage.getItem("userdata").split(" ")[0].replace(/\s+/g, '')
-    const response = await fetch(`http://localhost:3000/request-chat?token=${localStorage.getItem('token')}`, {
+    const response = await fetch(`http://` + localStorage.getItem('server') + `/request-chat?token=${localStorage.getItem('token')}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -96,7 +116,7 @@ function applyMessage(text, username, hour, filename){
     if (filename !== null){
         let image = document.createElement('img')
         image.className = 'message-image'
-        image.src = 'http://localhost:3000/uploads/' + filename
+        image.src = 'http://' + localStorage.getItem('server') + '/uploads/' + filename
         feedBackground.appendChild(image)
     }
     scrollToBottom()
@@ -109,7 +129,7 @@ function sendMessage(text){
     formData.append('image', fileInput.files[0]);
     formData.append('text', text);
     formData.append('friend', friend);
-    fetch(`http://localhost:3000/send-message?token=${localStorage.getItem('token')}`, {
+    fetch(`http://` + localStorage.getItem('server') + `/send-message?token=${localStorage.getItem('token')}`, {
         method: 'POST',
         body: formData
     })
@@ -127,9 +147,7 @@ function sendMessage(text){
                     refreshMessages()
                 }
                 input.textContent = ""
-                fileInput.value = '';
-                document.getElementById('image-wrapper').innerHTML = '';
-                document.getElementById('image-wrapper').style.visibility = 'hidden'
+                closeImageWrapper()
             }
         })
         .catch(error => {
@@ -173,14 +191,28 @@ fileInput.addEventListener('change', () => {
         img.style.width = '15rem';
         img.style.borderRadius = '1rem';
 
+        const closeButton = document.createElement('button');
+        closeButton.className = 'custom-button'
+        closeButton.id = 'close-image-button'
+        closeButton.addEventListener('click', closeImageWrapper)
+
         document.getElementById('image-wrapper').innerHTML = '';
-        document.getElementById('image-wrapper').style.visibility = 'visible';
+        document.getElementById('image-wrapper').style.visibility = 'visible'
         document.getElementById('image-wrapper').appendChild(img);
+        document.getElementById('image-wrapper').appendChild(closeButton);
     };
     reader.readAsDataURL(file);
 });
 
 function scrollToBottom(){
-    let feed = document.getElementById('lobby-feed');
-    feed.scrollTop = feed.scrollHeight - feed.clientHeight;
+    setTimeout(function() {
+        let feed = document.getElementById('lobby-feed');
+        feed.scrollTop = feed.scrollHeight - feed.clientHeight;
+    }, 200);
+}
+
+function closeImageWrapper(){
+    fileInput.value = '';
+    document.getElementById('image-wrapper').innerHTML = '';
+    document.getElementById('image-wrapper').style.visibility = 'hidden'
 }

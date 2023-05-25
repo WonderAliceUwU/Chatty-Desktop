@@ -13,7 +13,7 @@ ipcRenderer.on('message', (event, text, from, filename)=>{
         else{
             applyMessage(text, time, null)
         }
-        fetch(`http://localhost:3000/read-friend?token=${localStorage.getItem('token')}`, {
+        fetch(`http://` + localStorage.getItem('server')+ `/read-friend?token=${localStorage.getItem('token')}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ function applyMessage(text, time, filename){
     if (filename !== null){
         let image = document.createElement('img')
         image.className = 'message-image'
-        image.src = 'http://localhost:3000/uploads/' + filename
+        image.src = 'http://' + localStorage.getItem('server')+ '/uploads/' + filename
         feedBackground.appendChild(image)
     }
 
@@ -87,7 +87,7 @@ contextBridge.exposeInMainWorld('darkMode', {
 
 contextBridge.exposeInMainWorld('electron', {
     reloadPage: () => ipcRenderer.invoke('reload-page'),
-    connectServer: (token) => ipcRenderer.invoke('connect-server', token),
+    connectServer: (token, server) => ipcRenderer.invoke('connect-server', token, server),
 })
 
 contextBridge.exposeInMainWorld('sections', {
@@ -109,7 +109,7 @@ contextBridge.exposeInMainWorld('sections', {
 
 contextBridge.exposeInMainWorld('utils', {
     async getProfileUrl(username) {
-        const response = await fetch(`http://localhost:3000/request-pfp-url`, {
+        const response = await fetch(`http://` + localStorage.getItem('server')+ `/request-pfp-url`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ contextBridge.exposeInMainWorld('utils', {
 
 contextBridge.exposeInMainWorld('appends', {
     async appendFriendList(mode) {
-        const response = await fetch(`http://localhost:3000/request-list-friend?token=${localStorage.getItem('token')}`, {
+        const response = await fetch(`http://` + localStorage.getItem('server')+ `/request-list-friend?token=${localStorage.getItem('token')}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -140,7 +140,7 @@ contextBridge.exposeInMainWorld('appends', {
             body: JSON.stringify({}),
         });
 
-        const responseUnreads = await fetch(`http://localhost:3000/request-unreads?token=${localStorage.getItem('token')}`, {
+        const responseUnreads = await fetch(`http://` + localStorage.getItem('server')+ `/request-unreads?token=${localStorage.getItem('token')}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -163,7 +163,7 @@ contextBridge.exposeInMainWorld('appends', {
             for (let i = friendships.length - 1; i >= 0; i--) {
                 let url
                 let username = friendships[i].username
-                const responsePFP = await fetch(`http://localhost:3000/request-pfp-url`, {
+                const responsePFP = await fetch(`http://`+ localStorage.getItem('server') +`/request-pfp-url`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -194,7 +194,7 @@ contextBridge.exposeInMainWorld('appends', {
 
                 friendName.className = 'friend-name'
                 pfp.className = 'user-pfp'
-                pfp.src = "http://localhost:3000" + url
+                pfp.src = "http://"+ localStorage.getItem('server') + url
                 friendStatus.className = 'friend-status'
 
                 friendName.textContent = friendships[i].username
@@ -223,7 +223,7 @@ contextBridge.exposeInMainWorld('appends', {
         }
     },
     async refreshFriendsList() {
-        const response = await fetch(`http://localhost:3000/request-friend-requests?token=${localStorage.getItem('token')}`, {
+        const response = await fetch(`http://`+ localStorage.getItem('server') +`/request-friend-requests?token=${localStorage.getItem('token')}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

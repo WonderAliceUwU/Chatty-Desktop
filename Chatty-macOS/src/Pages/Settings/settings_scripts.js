@@ -18,7 +18,7 @@ async function imageUpload() {
     formData.append('image', imageFile.files[0]);
     formData.append('username', localStorage.getItem('username'));
 // end AJAX request
-    const response = await fetch('http://localhost:3000/api/images', {
+    const response = await fetch('http://' + localStorage.getItem('server') + '/api/images', {
         method: 'POST',
         body: formData
     });
@@ -36,7 +36,7 @@ async function changeStatus(){
     const newPassword = ""
     const username = localStorage.getItem("username")
     try {
-        const response = await fetch('http://localhost:3000/change_profile', {
+        const response = await fetch('http://' + localStorage.getItem('server') + '/change_profile', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

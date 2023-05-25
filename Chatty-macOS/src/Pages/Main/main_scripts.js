@@ -15,7 +15,7 @@ window.onload = async function () {
 }
 
 async function getFeed(){
-    const response = await fetch(`http://localhost:3000/request-feed?token=${localStorage.getItem('token')}`, {
+    const response = await fetch(`http://`+ localStorage.getItem('server') +`/request-feed?token=${localStorage.getItem('token')}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ async function getFeed(){
      feedBackground.className = 'feed-message-background'
      pfp.className = 'user-pfp'
 
-     pfp.src = "http://localhost:3000" + await window.utils.getProfileUrl(username)
+     pfp.src = "http://"+ localStorage.getItem('server') + await window.utils.getProfileUrl(username)
      feedDate.className = 'feed-date'
      feedDate.textContent = date
      feedUser.className = 'feed-name'
@@ -75,7 +75,7 @@ async function getFeed(){
      if (filename !== null){
          let image = document.createElement('img')
          image.className = 'chat-image'
-         image.src = 'http://localhost:3000/uploads/' + filename
+         image.src = 'http://'+ localStorage.getItem('server') + '/uploads/' + filename
          feedBackground.appendChild(image)
      }
  }
@@ -84,7 +84,7 @@ function uploadFeed(text){
     const formData = new FormData();
     formData.append('image', fileInput.files[0]);
     formData.append('text', text);
-    fetch(`http://localhost:3000/feed-message?token=${localStorage.getItem('token')}`, {
+    fetch(`http://`+ localStorage.getItem('server') +`/feed-message?token=${localStorage.getItem('token')}`, {
         method: 'POST',
         body: formData
     })
@@ -140,10 +140,8 @@ function sendMessageAction(){
         else{
             reloadFeed()
         }
-        fileInput.value = '';
         input.textContent = ""
-        document.getElementById('image-wrapper').innerHTML = '';
-        document.getElementById('image-wrapper').style.visibility = 'hidden'
+        closeImageWrapper()
     }
 }
 
@@ -160,15 +158,27 @@ fileInput.addEventListener('change', () => {
     reader.onload = (event) => {
         const imageUrl = event.target.result;
 
-        // Create an <img> element
         const img = document.createElement('img');
         img.src = imageUrl;
         img.style.width = '15rem'
         img.style.borderRadius = '1rem'
 
+        const closeButton = document.createElement('button');
+        closeButton.className = 'custom-button'
+        closeButton.id = 'close-image-button'
+        closeButton.addEventListener('click', closeImageWrapper)
+
         document.getElementById('image-wrapper').innerHTML = '';
         document.getElementById('image-wrapper').style.visibility = 'visible'
         document.getElementById('image-wrapper').appendChild(img);
+        document.getElementById('image-wrapper').appendChild(closeButton);
+
     };
     reader.readAsDataURL(file);
 });
+
+function closeImageWrapper(){
+    fileInput.value = '';
+    document.getElementById('image-wrapper').innerHTML = '';
+    document.getElementById('image-wrapper').style.visibility = 'hidden'
+}
