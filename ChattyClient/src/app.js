@@ -1,10 +1,7 @@
 const { app, BrowserWindow, ipcMain, nativeTheme } = require('electron');
 const path = require('path');
-const net = require('net');
 const electron = require("electron");
-const WebSocket = require('websocket').w3cwebsocket;
 const io = require('socket.io-client');
-const storage = require('electron-json-storage');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -32,7 +29,7 @@ if (process.platform === 'darwin') {
 
 
     const app = electron.app;
-    const icon = electron.nativeImage.createFromPath(app.getAppPath() + "/src/Images/icon.png");
+    const icon = electron.nativeImage.createFromPath(app.getAppPath() + "/src/Images/Icons/icon.png");
     app.dock.setIcon(icon);
 
     //toggle that detects if dark mode is enabled in the system, changing the scheme colors
@@ -52,6 +49,7 @@ if (process.platform === 'darwin') {
     ipcMain.handle('reload-page', () => {
       BrowserWindow.getFocusedWindow().webContents.reloadIgnoringCache()
     })
+
 
     ipcMain.handle('connect-server', (event, username, server) =>{
       const socket = io('http://' + server, {

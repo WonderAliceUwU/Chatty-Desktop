@@ -1,24 +1,18 @@
 module.exports = {
-  packagerConfig: {icon: '/src/Images/icon' },
-  rebuildConfig: {},
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
       config: {
-        icon: '/src/Images/windowsIcon.ico'
+        iconUrl: 'file:///src/Images/Icons/windowsIcon.ico',
       },
     },
     {
       name: '@electron-forge/maker-zip',
       platforms: ['darwin'],
+      config: {
+        icon: 'path/to/your/icon.icns',
+      },
     },
-    {
-      name: '@electron-forge/maker-deb',
-      config: {},
-    },
-    {
-      name: '@electron-forge/maker-rpm',
-      config: {},
-    },
+    // ... other makers
   ],
 };

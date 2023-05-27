@@ -1,9 +1,8 @@
 {
-  "name": "my-app",
-  "productName": "my-app",
+  "name": "chatty",
+  "productName": "Chatty",
   "version": "1.0.0",
-  "icon": "src/Images/Logo.icns",
-  "description": "My Electron application description",
+  "description": "An app to chat and keep in touch with friends privately!",
   "main": "src/app.js",
   "scripts": {
     "start": "electron-forge start",
@@ -14,16 +13,47 @@
   },
   "keywords": [],
   "author": {
-    "name": "WonderAlice",
-    "email": "cuddlealice@gmail.com"
+    "name": "WonderAlice"
   },
   "license": "MIT",
+  "config": {
+    "forge": {
+      "packagerConfig": {
+        "icon": "src/Images/Icons/icon.icns"
+      },
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "iconUrl": "file:///path/to/your/icon.ico"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ],
+          "config": {
+            "icon": "src/Images/Icons/icon.icns"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
+  },
   "dependencies": {
-    "@joeattardi/emoji-button": "^4.6.4",
     "electron-cookies": "^1.1.0",
     "electron-json-storage": "^4.6.0",
     "electron-localshortcut": "^3.2.1",
     "electron-squirrel-startup": "^1.0.0",
+    "emoji-mart": "^5.5.2",
     "socket.io-client": "^4.6.1",
     "websocket": "^1.0.34",
     "ws": "^8.13.0"

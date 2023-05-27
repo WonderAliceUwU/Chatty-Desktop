@@ -26,7 +26,9 @@ html, body{
   margin-left: 0.5rem;
   margin-right: 0.5rem;
   transition: all 200ms;
+  max-height: 4rem;
   align-items: center;
+  align-self: end;
 }
 
 .login-body {
