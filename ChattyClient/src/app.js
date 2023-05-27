@@ -33,9 +33,7 @@ if (process.platform === 'darwin') {
 
     const app = electron.app;
     const icon = electron.nativeImage.createFromPath(app.getAppPath() + "/src/Images/icon.png");
-    if (process.platform === 'darwin') {
-      app.dock.setIcon(icon);
-    }
+    app.dock.setIcon(icon);
 
     //toggle that detects if dark mode is enabled in the system, changing the scheme colors
     ipcMain.handle('dark-mode:toggle', () => {
@@ -84,7 +82,8 @@ else {
       width: 930,
       height: 650,
       titleBarStyle: 'visible',
-      icon: path.join(__dirname, 'src/Images/icon.png'),
+      autoHideMenuBar: true,
+      icon: path.join(__dirname, 'Images/windowsIcon.ico'),
       webPreferences: {
         preload: path.join(__dirname, 'preload.js'),
         nodeIntegration: true,
@@ -94,14 +93,7 @@ else {
 
     // and load the index.html of the app.
     mainWindow.loadFile(path.join(__dirname, 'Pages/Login/login.html'));
-
-
     const app = electron.app;
-    const icon = electron.nativeImage.createFromPath(app.getAppPath() + "/src/Images/icon.png");
-    if (process.platform === 'darwin') {
-      app.dock.setIcon(icon);
-    }
-
     //toggle that detects if dark mode is enabled in the system, changing the scheme colors
     ipcMain.handle('dark-mode:toggle', () => {
       if (nativeTheme.shouldUseDarkColors) {
@@ -142,7 +134,6 @@ else {
     })
   };
 }
-
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
