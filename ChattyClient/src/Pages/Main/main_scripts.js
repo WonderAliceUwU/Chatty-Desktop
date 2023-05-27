@@ -13,7 +13,6 @@ window.onload = async function () {
         hideLoadingScreen();
     })
 }
-
 async function getFeed(){
     const response = await fetch(`http://`+ localStorage.getItem('server') +`/request-feed?token=${localStorage.getItem('token')}`, {
         method: 'POST',

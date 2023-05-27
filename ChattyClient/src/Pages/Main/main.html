@@ -22,25 +22,25 @@
       </div>
     </div>
   </body>
-  <body class="footer">
-  <div class="profile">
-    <button id="self-button" role="button">
-      <img id="self-pfp" style="margin-left: 0.5rem" src="" alt="pfp">
-      <div style="display: flex; flex-direction: column">
-        <medium id="self-user">Sample text</medium>
-        <div class="friend-status" id="self-status">Sample text</div>
-      </div>
-    </button>
-    <button id="add-friend-button"><img src="../../Images/add-friend-button-light.png" id="friend-button-image"> </button>
-  </div>
+  <body>
+    <div class="profile">
+      <button id="self-button" role="button">
+        <img id="self-pfp" style="margin-left: 0.5rem" src="" alt="pfp">
+        <div style="display: flex; flex-direction: column">
+          <medium id="self-user">Sample text</medium>
+          <div class="friend-status" id="self-status">Sample text</div>
+        </div>
+      </button>
+      <button id="add-friend-button"><img src="../../Images/add-friend-button-light.png" id="friend-button-image"> </button>
+    </div>
     <div class="feed-fields">
       <div id="image-wrapper"></div>
       <div id="input-wrapper">
-          <div id="input" contentEditable placeholder="What's happening?" oninput="if(this.innerHTML.trim()==='<br>')this.innerHTML=''"></div>
-          <button id="emoji-button" class="custom-button"><emoji-picker></emoji-picker></button>
-          <button id="image-button" class="custom-button"><input class="custom-input" id="image-input" type="file" style="visibility: hidden; width: 15rem;"></button>
-          <button id="send-button" class="custom-button"></button>
-        </div>
+        <div id="input" contentEditable placeholder="What's happening?" oninput="if(this.innerHTML.trim()==='<br>')this.innerHTML=''"></div>
+        <button id="emoji-button" class="custom-button"><emoji-picker></emoji-picker></button>
+        <button id="image-button" class="custom-button"><input class="custom-input" id="image-input" type="file" style="visibility: hidden; width: 15rem;"></button>
+        <button id="send-button" class="custom-button"></button>
+      </div>
     </div>
   </body>
   <script src="../../renderer.js"></script>

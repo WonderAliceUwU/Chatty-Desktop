@@ -10,69 +10,139 @@ const storage = require('electron-json-storage');
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
+let createWindow;
 
-
-const createWindow = () => {
-  // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: 930,
-    height: 650,
-    titleBarStyle: 'hidden',
-    icon: path.join(__dirname, 'src/Images/icon.png'),
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: true,
-      enableRemoteModule: true,
-    },
-  });
-
-  // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, 'Pages/Login/login.html'));
-
-
-  const app = electron.app;
-  const icon = electron.nativeImage.createFromPath(app.getAppPath() + "/src/Images/icon.png");
-  app.dock.setIcon(icon);
-
-  //toggle that detects if dark mode is enabled in the system, changing the scheme colors
-  ipcMain.handle('dark-mode:toggle', () => {
-    if (nativeTheme.shouldUseDarkColors) {
-      nativeTheme.themeSource = 'light'
-    } else {
-      nativeTheme.themeSource = 'dark'
-    }
-    return nativeTheme.shouldUseDarkColors
-  })
-
-  ipcMain.handle('dark-mode:system', () => {
-    nativeTheme.themeSource = 'system'
-  })
-
-  ipcMain.handle('reload-page', () => {
-    BrowserWindow.getFocusedWindow().webContents.reloadIgnoringCache()
-  })
-
-  ipcMain.handle('connect-server', (event, username, server) =>{
-    const socket = io('http://' + server, {
-      query: { username: username }
+if (process.platform === 'darwin') {
+  createWindow = () => {
+    // Create the browser window.
+    const mainWindow = new BrowserWindow({
+      width: 930,
+      height: 650,
+      titleBarStyle: 'hidden',
+      icon: path.join(__dirname, 'src/Images/icon.png'),
+      webPreferences: {
+        preload: path.join(__dirname, 'preload.js'),
+        nodeIntegration: true,
+        enableRemoteModule: true,
+      },
     });
+
+    // and load the index.html of the app.
+    mainWindow.loadFile(path.join(__dirname, 'Pages/Login/login.html'));
+
+
+    const app = electron.app;
+    const icon = electron.nativeImage.createFromPath(app.getAppPath() + "/src/Images/icon.png");
+    if (process.platform === 'darwin') {
+      app.dock.setIcon(icon);
+    }
+
+    //toggle that detects if dark mode is enabled in the system, changing the scheme colors
+    ipcMain.handle('dark-mode:toggle', () => {
+      if (nativeTheme.shouldUseDarkColors) {
+        nativeTheme.themeSource = 'light'
+      } else {
+        nativeTheme.themeSource = 'dark'
+      }
+      return nativeTheme.shouldUseDarkColors
+    })
+
+    ipcMain.handle('dark-mode:system', () => {
+      nativeTheme.themeSource = 'system'
+    })
+
+    ipcMain.handle('reload-page', () => {
+      BrowserWindow.getFocusedWindow().webContents.reloadIgnoringCache()
+    })
+
+    ipcMain.handle('connect-server', (event, username, server) =>{
+      const socket = io('http://' + server, {
+        query: { username: username }
+      });
 
 // Listen for incoming messages
-    socket.on('message', ({ from, text, filename }) => {
-      let location = mainWindow.webContents.getURL()
-      let lastIndex = location.lastIndexOf('html')
-      location = location.slice(lastIndex - 5, lastIndex -1)
-      if (location === 'chat'){
-        mainWindow.webContents.send('message', text, from, filename)
-      }
-      else{
-        mainWindow.webContents.send('message-out', from)
-      }
-      console.log(`Received message from ${from}: ${text}`);
+      socket.on('message', ({ from, text, filename }) => {
+        let location = mainWindow.webContents.getURL()
+        let lastIndex = location.lastIndexOf('html')
+        location = location.slice(lastIndex - 5, lastIndex -1)
+        if (location === 'chat'){
+          mainWindow.webContents.send('message', text, from, filename)
+        }
+        else{
+          mainWindow.webContents.send('message-out', from)
+        }
+        console.log(`Received message from ${from}: ${text}`);
+      });
+
+    })
+  };
+}
+else {
+  createWindow = () => {
+    // Create the browser window.
+    const mainWindow = new BrowserWindow({
+      width: 930,
+      height: 650,
+      titleBarStyle: 'visible',
+      icon: path.join(__dirname, 'src/Images/icon.png'),
+      webPreferences: {
+        preload: path.join(__dirname, 'preload.js'),
+        nodeIntegration: true,
+        enableRemoteModule: true,
+      },
     });
 
-  })
-};
+    // and load the index.html of the app.
+    mainWindow.loadFile(path.join(__dirname, 'Pages/Login/login.html'));
+
+
+    const app = electron.app;
+    const icon = electron.nativeImage.createFromPath(app.getAppPath() + "/src/Images/icon.png");
+    if (process.platform === 'darwin') {
+      app.dock.setIcon(icon);
+    }
+
+    //toggle that detects if dark mode is enabled in the system, changing the scheme colors
+    ipcMain.handle('dark-mode:toggle', () => {
+      if (nativeTheme.shouldUseDarkColors) {
+        nativeTheme.themeSource = 'light'
+      } else {
+        nativeTheme.themeSource = 'dark'
+      }
+      return nativeTheme.shouldUseDarkColors
+    })
+
+    ipcMain.handle('dark-mode:system', () => {
+      nativeTheme.themeSource = 'system'
+    })
+
+    ipcMain.handle('reload-page', () => {
+      BrowserWindow.getFocusedWindow().webContents.reloadIgnoringCache()
+    })
+
+    ipcMain.handle('connect-server', (event, username, server) =>{
+      const socket = io('http://' + server, {
+        query: { username: username }
+      });
+
+// Listen for incoming messages
+      socket.on('message', ({ from, text, filename }) => {
+        let location = mainWindow.webContents.getURL()
+        let lastIndex = location.lastIndexOf('html')
+        location = location.slice(lastIndex - 5, lastIndex -1)
+        if (location === 'chat'){
+          mainWindow.webContents.send('message', text, from, filename)
+        }
+        else{
+          mainWindow.webContents.send('message-out', from)
+        }
+        console.log(`Received message from ${from}: ${text}`);
+      });
+
+    })
+  };
+}
+
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
