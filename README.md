@@ -18,7 +18,7 @@ Chatty can be easily set up to create a social network that's only for you and y
 <p>
 <img align="right" width="600" alt="Chat screen 2" src="https://github.com/WonderAliceUwU/Chatty-Desktop/assets/83221077/c3ac141a-ffec-41b7-b81b-7634b847607e">
   </br></br></br></br></br></br></br></br></br></br></br>
-<img align="left" width="200" alt="Chat img" src="https://github.com/WonderAliceUwU/Chatty-Desktop/assets/83221077/3c0ea5c2-b454-4b00-8dca-073b0d7dcfcc">
+<img align="left" width="190" alt="Chat img" src="https://github.com/WonderAliceUwU/Chatty-Desktop/assets/83221077/3c0ea5c2-b454-4b00-8dca-073b0d7dcfcc">
 <img align="right" width="600" alt"Chat screen" src="https://github.com/WonderAliceUwU/Chatty-Desktop/assets/83221077/7a84d55d-7e62-4b62-9574-8ce33d2ec3d2">
 </p>
 
