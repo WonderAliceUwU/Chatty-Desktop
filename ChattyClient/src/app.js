@@ -24,6 +24,8 @@ if (process.platform === 'darwin') {
       },
     });
 
+    mainWindow.setMinimumSize(865, 545);
+
     // and load the index.html of the app.
     mainWindow.loadFile(path.join(__dirname, 'Pages/Login/login.html'));
 
@@ -81,7 +83,7 @@ else {
       height: 650,
       titleBarStyle: 'visible',
       autoHideMenuBar: true,
-      icon: path.join(__dirname, 'Images/windowsIcon.ico'),
+      icon: path.join(__dirname, 'Images/icon.ico'),
       webPreferences: {
         preload: path.join(__dirname, 'preload.js'),
         nodeIntegration: true,

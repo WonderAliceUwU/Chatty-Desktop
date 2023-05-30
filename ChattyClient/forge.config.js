@@ -3,7 +3,7 @@ module.exports = {
     {
       name: '@electron-forge/maker-squirrel',
       config: {
-        iconUrl: 'file:///src/Images/Icons/windowsIcon.ico',
+        iconUrl: 'file:///src/Images/Icons/icon.ico',
       },
     },
     {
