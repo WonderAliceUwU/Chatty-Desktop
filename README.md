@@ -1,7 +1,11 @@
-<p align="right"><img width="40" alt="Chatty-mobile" src="https://github.com/WonderAliceUwU/Chatty-Desktop/assets/83221077/6a075bec-f662-458e-896d-e7e191dae47a"><img width="35" alt="Chatty-mobile" src="https://github.com/WonderAliceUwU/Chatty-Desktop/assets/83221077/ec70fcb4-1196-4883-963d-b23ac93b0b90"><img width="35" alt="Chatty-mobile" src="https://github.com/WonderAliceUwU/Chatty-Desktop/assets/83221077/a23ccf18-c7ba-4c1d-896e-ba67721f3d57"></p>
+<p align="right">
+ <img width="40" alt="Chatty-mobile" src="https://github.com/WonderAliceUwU/Chatty-Desktop/assets/83221077/6a075bec-f662-458e-896d-e7e191dae47a">
+ <img width="35" alt="Chatty-mobile" src="https://github.com/WonderAliceUwU/Chatty-Desktop/assets/83221077/ec70fcb4-1196-4883-963d-b23ac93b0b90">
+ <img width="35" alt="Chatty-mobile" src="https://github.com/WonderAliceUwU/Chatty-Desktop/assets/83221077/a23ccf18-c7ba-4c1d-896e-ba67721f3d57">
+</p>
 
 <p align="center">
-<img width="400" alt="Chatty-mobile" src="https://github.com/WonderAliceUwU/Chatty-Desktop/assets/83221077/48f60b88-9a16-4ebd-a582-e7b0851e752e">
+<img width="450" alt="Chatty-mobile" src="https://github.com/WonderAliceUwU/Chatty-Desktop/assets/83221077/48f60b88-9a16-4ebd-a582-e7b0851e752e">
 </p>
 
 # Chatty - A private social network
