@@ -554,7 +554,7 @@ app.post('/api/images', upload.single('image'), (req, res) => {
 });
 
 // Start the server and listen for WebSocket connections
-server.listen(3000, () => {
+server.listen(3000, '0.0.0.0', () => {
     console.log(`Server started on port ${3000}`);
 });
 
