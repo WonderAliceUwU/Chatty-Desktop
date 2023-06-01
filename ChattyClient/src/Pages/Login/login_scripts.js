@@ -82,6 +82,5 @@ function toggleInputContainer() {
 
 function saveIP(){
     localStorage.setItem('server', document.getElementById('ip-input').value)
-    document.getElementById('ip-input').value = ''
     document.getElementById('change-ip-button').disabled = true
 }
