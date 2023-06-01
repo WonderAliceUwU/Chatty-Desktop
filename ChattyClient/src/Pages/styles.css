@@ -83,6 +83,7 @@ html, body{
   color: #e3e3e3;
   margin-right: 2.5%;
   align-self: end;
+  max-width: 60%;
 }
 
 #close-image-button{
@@ -99,7 +100,7 @@ html, body{
 .friend-message{
   margin-top: 1rem;
   color: #e3e3e3;
-  max-width: 90%;
+  max-width: 60%;
   align-self: start;
 }
 
@@ -146,6 +147,12 @@ html, body{
   width: 15rem;
   margin: 0 0.6rem 0.3rem;
   border-radius: 0.5rem;
+}
+
+#version-text{
+  position: absolute;
+  top: 92%;
+  left: 94%;
 }
 
 .message-image{

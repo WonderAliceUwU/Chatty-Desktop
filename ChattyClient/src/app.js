@@ -1,4 +1,5 @@
 const { app, BrowserWindow, ipcMain, nativeTheme } = require('electron');
+app.setAppUserModelId('Chatty');
 const path = require('path');
 const electron = require("electron");
 const io = require('socket.io-client');
@@ -133,6 +134,12 @@ else {
         }
         else{
           mainWindow.webContents.send('message-out', from)
+          const iconPath = path.join(__dirname, 'Images/Icons/icon.ico');
+          new Notification({
+            title: from,
+            body: text,
+            icon: iconPath
+          }).show()
         }
         console.log(`Received message from ${from}: ${text}`);
       });

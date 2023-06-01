@@ -1,5 +1,10 @@
 document.querySelector("#login-button").addEventListener("click", login)
 document.querySelector("#register-button").addEventListener("click", goRegister)
+document.getElementById("PassInput").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        login()
+    }
+});
 document.getElementById('login-theme-toggle').addEventListener('click', async () => {
     const isDarkMode = await window.darkMode.toggle()
     document.getElementById('theme-source').innerHTML = isDarkMode ? 'Dark' : 'Light'
@@ -72,7 +77,7 @@ document.getElementById('change-ip-button').addEventListener('click', saveIP)
 document.getElementById('default-ip-button').addEventListener('click', defaultIP)
 if (localStorage.getItem('server') !== null){
     if (localStorage.getItem('server') === '34.175.231.104:3000'){
-        document.getElementById('ip-input').value = 'default'
+        document.getElementById('ip-input').value = 'Default IP'
     }
     else{
         document.getElementById('ip-input').value = localStorage.getItem('server')

@@ -16,6 +16,22 @@
     "name": "WonderAlice"
   },
   "license": "MIT",
+  "build": {
+    "appId": "com.chatty.app",
+    "productName": "Chatty",
+    "directories": {
+      "output": "build"
+    },
+    "mac": {
+      "icon": "src/Images/Icons/icon.icns"
+    },
+    "win": {
+      "icon": "src/Images/Icons/icon.ico"
+    },
+    "linux": {
+      "icon": "src/Images/Icons/icon.png"
+    }
+  },
   "config": {
     "forge": {
       "packagerConfig": {
@@ -60,6 +76,7 @@
     "@electron-forge/maker-rpm": "^6.0.5",
     "@electron-forge/maker-squirrel": "^6.0.5",
     "@electron-forge/maker-zip": "^6.0.5",
-    "electron": "23.1.1"
+    "electron": "23.1.1",
+    "electron-builder": "^24.4.0"
   }
 }
