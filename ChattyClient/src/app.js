@@ -2,6 +2,8 @@ const { app, BrowserWindow, ipcMain, nativeTheme } = require('electron');
 const path = require('path');
 const electron = require("electron");
 const io = require('socket.io-client');
+const { Notification } = require('electron')
+
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -68,6 +70,10 @@ if (process.platform === 'darwin') {
         }
         else{
           mainWindow.webContents.send('message-out', from)
+          new Notification({
+            title: from,
+            body: text
+          }).show()
         }
         console.log(`Received message from ${from}: ${text}`);
       });

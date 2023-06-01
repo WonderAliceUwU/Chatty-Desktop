@@ -706,8 +706,11 @@ html, body{
   background-repeat: no-repeat;
 }
 
+#default-ip-button{
+  height: 2rem;
+}
 #input-container.show {
-  width: 20rem;
+  width: 22rem;
 }
 
 #setting-container.show{
