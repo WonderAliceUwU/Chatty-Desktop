@@ -63,7 +63,7 @@ html, body{
 
 .setting-body{
   font-family: 'CustomRegular', sans-serif;
-  margin: 0.5rem auto auto;
+  margin: 3rem auto auto;
   text-align: center;
   display: grid;
   grid-template-columns: 10% 90%;

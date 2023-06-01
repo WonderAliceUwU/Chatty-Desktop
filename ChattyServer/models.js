@@ -5,13 +5,11 @@ const key = "Wonder4liceChattyKey";
 const sequelize = new Sequelize(
     'ChattyDB',
     'root',
-    'root',
+    'Wonder4lice',
     {
-        host: 'localhost',
-        port: 6033,
+        host: '34.175.215.82',
         dialect: 'mysql',
         dialectOptions: {
-            // useUTC: false, //for reading from database
             dateStrings: true,
             typeCast: true,
             timezone: "+02:00"
