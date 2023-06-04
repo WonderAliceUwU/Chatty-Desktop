@@ -17,6 +17,11 @@ window.onload = async function () {
     if (localStorage.getItem('server') === null){
         defaultIP()
     }
+    if (localStorage.getItem('username') !== null && localStorage.getItem('logged') === 'yes'){
+        await window.electron.connectServer(localStorage.getItem('username'), localStorage.getItem('server')).then(r => {
+            location.href = '../Main/main.html'
+        })
+    }
 }
 async function login(){
     const username = document.getElementById("UserInput").value;
@@ -47,6 +52,7 @@ async function login(){
                 localStorage.setItem('status', data.status)
                 localStorage.setItem('selfProfilePicture', data.pfp)
                 await window.electron.connectServer(username, localStorage.getItem('server')).then(r => {
+                    localStorage.setItem('logged', 'yes');
                     location.href = '../Main/main.html'
                 })
             }
@@ -76,7 +82,7 @@ document.getElementById('ip-input').addEventListener('input', enableButton)
 document.getElementById('change-ip-button').addEventListener('click', saveIP)
 document.getElementById('default-ip-button').addEventListener('click', defaultIP)
 if (localStorage.getItem('server') !== null){
-    if (localStorage.getItem('server') === '34.175.231.104:3000'){
+    if (localStorage.getItem('server') === '34.175.204.177:3000'){
         document.getElementById('ip-input').value = 'Default IP'
     }
     else{
@@ -101,7 +107,7 @@ function saveIP(){
 }
 
 function defaultIP(){
-    localStorage.setItem('server', '34.175.231.104:3000')
+    localStorage.setItem('server', '34.175.204.177:3000')
     document.getElementById('ip-input').value = 'Chatty server'
     document.getElementById('change-ip-button').disabled = true
 }

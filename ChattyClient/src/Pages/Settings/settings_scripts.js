@@ -9,9 +9,13 @@ function enableUpload(){
     document.getElementById('pfp-button').disabled = false;
 }
 
-function logout(){
+async function logout() {
+    localStorage.setItem('logged', 'no');
+    localStorage.removeItem('username');
     location.href = '../Login/login.html'
+    await window.electron.logout()
 }
+
 async function imageUpload() {
     const formData = new FormData();
     const imageFile = document.getElementById('pfp-input');

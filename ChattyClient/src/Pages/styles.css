@@ -705,17 +705,21 @@ html, body{
 }
 
 #change-ip-button{
-  height: 2rem;
-  width: 2rem;
-  background-image: url("../Images/green-check.png");
-  background-size: 1rem;
-  background-position: center;
-  background-repeat: no-repeat;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
 }
 
 #default-ip-button{
-  height: 2rem;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
 }
+
 #input-container.show {
   width: 22rem;
 }

@@ -88,6 +88,7 @@ contextBridge.exposeInMainWorld('darkMode', {
 contextBridge.exposeInMainWorld('electron', {
     reloadPage: () => ipcRenderer.invoke('reload-page'),
     connectServer: (token, server) => ipcRenderer.invoke('connect-server', token, server),
+    logout: () => ipcRenderer.invoke('logout'),
 })
 
 contextBridge.exposeInMainWorld('sections', {

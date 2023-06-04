@@ -57,31 +57,48 @@ if (process.platform === 'darwin') {
 
 
     ipcMain.handle('connect-server', (event, username, server) =>{
-      const socket = io('http://' + server, {
-        query: { username: username }
-      });
+      let socket;
+        socket = io('http://' + server, {
+          query: {username: username}
+        });
 
-// Listen for incoming messages
-      socket.on('message', ({ from, text, filename }) => {
-        let location = mainWindow.webContents.getURL()
-        let lastIndex = location.lastIndexOf('html')
-        location = location.slice(lastIndex - 5, lastIndex -1)
-        if (location === 'chat'){
-          mainWindow.webContents.send('message', text, from, filename)
-        }
-        else{
-          mainWindow.webContents.send('message-out', from)
-          new Notification({
-            title: from,
-            body: text
-          }).show()
-        }
-        console.log(`Received message from ${from}: ${text}`);
-      });
-
+        socket.on('message', ({from, text, filename}) => {
+          let location = mainWindow.webContents.getURL()
+          let lastIndex = location.lastIndexOf('html')
+          location = location.slice(lastIndex - 5, lastIndex - 1)
+          if (location === 'chat') {
+            mainWindow.webContents.send('message', text, from, filename)
+          } else {
+            mainWindow.webContents.send('message-out', from)
+            new Notification({
+              title: from,
+              body: text
+            }).show()
+          }
+          console.log(`Received message from ${from}: ${text}`);
+        });
     })
-  };
+    ipcMain.handle('logout', () =>{
+        app.relaunch();
+        app.exit();
+    });
+    };
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 else {
   createWindow = () => {
     // Create the browser window.
@@ -119,11 +136,16 @@ else {
       BrowserWindow.getFocusedWindow().webContents.reloadIgnoringCache()
     })
 
-    ipcMain.handle('connect-server', (event, username, server) =>{
-      const socket = io('http://' + server, {
-        query: { username: username }
-      });
-
+    ipcMain.handle('connect-server', (event, username, server, mode) =>{
+      let socket;
+      if (mode === 'connect'){
+         socket = io('http://' + server, {
+          query: { username: username }
+        });
+      }
+      if (mode === 'disconnect'){
+        socket.disconnect()
+      }
 // Listen for incoming messages
       socket.on('message', ({ from, text, filename }) => {
         let location = mainWindow.webContents.getURL()
