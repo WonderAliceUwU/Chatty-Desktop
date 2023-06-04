@@ -165,8 +165,11 @@ else {
         }
         console.log(`Received message from ${from}: ${text}`);
       });
-
     })
+    ipcMain.handle('logout', () =>{
+      app.relaunch();
+      app.exit();
+    });
   };
 }
 

@@ -82,7 +82,7 @@ document.getElementById('ip-input').addEventListener('input', enableButton)
 document.getElementById('change-ip-button').addEventListener('click', saveIP)
 document.getElementById('default-ip-button').addEventListener('click', defaultIP)
 if (localStorage.getItem('server') !== null){
-    if (localStorage.getItem('server') === '34.175.204.177:3000'){
+    if (localStorage.getItem('server') === '34.0.215.235:3000'){
         document.getElementById('ip-input').value = 'Default IP'
     }
     else{
@@ -107,7 +107,7 @@ function saveIP(){
 }
 
 function defaultIP(){
-    localStorage.setItem('server', '34.175.204.177:3000')
+    localStorage.setItem('server', '34.0.215.235:3000')
     document.getElementById('ip-input').value = 'Chatty server'
     document.getElementById('change-ip-button').disabled = true
 }
