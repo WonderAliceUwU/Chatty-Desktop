@@ -83,7 +83,7 @@ document.getElementById('change-ip-button').addEventListener('click', saveIP)
 document.getElementById('default-ip-button').addEventListener('click', defaultIP)
 if (localStorage.getItem('server') !== null){
     if (localStorage.getItem('server') === '34.0.215.235:3000'){
-        document.getElementById('ip-input').value = 'Default IP'
+        document.getElementById('ip-input').value = 'Chatty server'
     }
     else{
         document.getElementById('ip-input').value = localStorage.getItem('server')
